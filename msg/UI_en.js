@@ -38,12 +38,12 @@ var MSG = {
     saveCodeButton_span: "Export Code",
     newButton_span: "New project",
     save_span: "Save file name?",
-    saveXMLButton_span: "Save to BlocklyDuino file",
-    loadXMLfakeButton_span: "Load BlocklyDuino file",
+    saveXMLButton_span: "Save to BlockMicc file",
+    loadXMLfakeButton_span: "Load BlockMicc file",
     loadXML_span: "Replace existing blocks?\n'Cancel' will merge.",
     loadXML_error_span: "Error parsing XML:\n",
-    resetButton_span: "Reset BlocklyDuino",
-    resetQuestion_span: "Reset BlocklyDuino and",
+    resetButton_span: "Reset BlocMicc",
+    resetQuestion_span: "Reset BlocMicc and",
     helpButton_span: "help",
     helpModalSpan_title: "Help - About",
     helpModalSpan_text:
@@ -52,9 +52,9 @@ var MSG = {
         '<tr>' +
         '<td style="width: 142px;"><img src="./blocklyduino/media/logo_only.png" alt="" width="129" height="144" /></td>' +
         '<td>' +
-        '<p style="text-align: left;"><strong>BlocklyDuino</strong></p>' +
-        '<p style="text-align: left;">BlocklyDuino is a <strong>web program for editing and visual block programming for <a href="https://www.arduino.cc/">Arduino</a> boards</strong>. It is based on <a href="https://developers.google.com/blockly/">Blockly</a>, the graphical online programming editor and on the work done on <a href="https://github.com/A-S-T-U-C-E/STudio4Education">STudio4Education</a>, a similar project for <a href="https://www.st.com/">STmicroelectronics</a> boards.</p>' +
-        '<p style="text-align: left;">BlocklyDuino provides a block programming environment and their translation into \'Arduino\' C code.</p>' +
+        '<p style="text-align: left;"><strong>BlockMicc</strong></p>' +
+        '<p style="text-align: left;">BlockMicc is a <strong>web program for editing and visual block programming for <a href="https://www.arduino.cc/">Arduino</a> boards</strong>. It is based on <a href="https://developers.google.com/blockly/">Blockly</a>, the graphical online programming editor and on the work done on <a href="https://github.com/A-S-T-U-C-E/STudio4Education">STudio4Education</a>, a similar project for <a href="https://www.st.com/">STmicroelectronics</a> boards.</p>' +
+        '<p style="text-align: left;">BlockMicc provides a block programming environment and their translation into \'Arduino\' C code.</p>' +
         '</td>' +
         '</tr>' +
         '</tbody>' +

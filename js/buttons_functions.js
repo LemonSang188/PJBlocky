@@ -347,16 +347,24 @@ Code.uploadCode = function (code, boardId, mode, callback) {
  * Creates an XML file containing the blocks from the Blockly workspace and
  * prompts the users to save it into their local file system.
  */
+function formatDateToThailandTimezone(date) {
+    return date.toLocaleString("en-GB", {
+        timeZone: "Asia/Bangkok",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    });
+}
 Code.saveXmlBlocklyFile = function () {
     var xmlData = Blockly.Xml.workspaceToDom(Code.workspace);
     var dataToSave = Blockly.Xml.domToPrettyText(xmlData);
     var blob = new Blob([dataToSave], {
         type: 'text/xml;charset=utf-8'
     });
-    Blockly.prompt(MSG['save_span'], 'blockly', function (fileNameSave) {
+    Blockly.prompt(MSG['save_span'], 'blockmicc' + formatDateToThailandTimezone(new Date()) , function (fileNameSave) {
         if (fileNameSave) {
             var fakeDownloadLink = document.createElement("a");
-            fakeDownloadLink.download = fileNameSave + ".bduino";
+            fakeDownloadLink.download = fileNameSave + ".vsc";
             fakeDownloadLink.href = window.URL.createObjectURL(blob);
             fakeDownloadLink.onclick = function destroyClickedElement(event) {
                 document.body.removeChild(event.target);
@@ -396,7 +404,7 @@ Code.loadXmlBlocklyFile = function () {
         var selectFileDom = document.createElement('INPUT');
         selectFileDom.type = 'file';
         selectFileDom.id = 'select_file';
-        selectFileDom.accept = '.bduino, .xml';
+        selectFileDom.accept = '.bduino, .xml, .vsc';
         selectFileDom.style.display = 'none';
         document.body.appendChild(selectFileDom);
         selectFile = document.getElementById('select_file');

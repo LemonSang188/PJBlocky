@@ -26,27 +26,27 @@
     padding:2px;
     line-height:0;
     vertical-align: middle;
-    background: #006468;
-    color: #FFFFFF;
+    background: #afb1b1;
+    color: black;
     font-size: 1.5em;
     width: 32px;
 }
 .iconButtons:hover{
-    background: #FFFFFF;
+    background: #666666;
     color: #000000;
     cursor : pointer;
     transition: 0.5s ease;
 }
 .iconButtons:active{
-    background: #FFCC00;
+    background: #FFFFFF;
 }
 .iconButtons:active::after {
     transition-property: background;
     transition-duration: 10s;
 }
 .iconButtons:disabled{
-    background: #F3F1EF;
-    color: #006468;
+    background: #838585;
+    color: black;
     cursor : not-allowed;
 }
 .iconButtonsClicked{
@@ -57,8 +57,8 @@
     padding:2px;
     line-height:0;
     vertical-align: middle;
-    background: #FFCC00;
-    color: #006468;
+    background: #666666;
+    color: #000000;
     font-size: x-large;
     width: 32px;
 }
@@ -76,7 +76,7 @@
     border-radius: 5px;
 }
 #barre_h{
-    background-color : #17a1a5;
+    background-color : #e7e7e7;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;

@@ -7,55 +7,55 @@
 /* CSS specific added for the theme */
 
 body {
-    background-color: #006468;
+    background-color: #afb1b1;
 }
 #separator {
-    background-color: #006468;
+    background-color: #afb1b1;
 }
 #helpModal_header {
-    background-color: #006468;
+    background-color: #afb1b1;
 }
 #keyboard_nav_header {
-    background-color: #006468;
+    background-color: #afb1b1;
 }
 #buttonsMenuPopupInside,
 #buttonsToolsPopupInside,
 #buttonsIotPopupInside{
-    background-color: #006468;
+    background-color: #afb1b1;
     padding: 5px;
 }
 .config_content {
-    background-color: #006468;
+    background-color: #afb1b1;
 }
 .modal-header, .modal-footer {
-    background-color: #006468;
+    background-color: #afb1b1;
 }
 .accordion {
-  background-color: #006468;
+  background-color: #afb1b1;
 }
 .accordion:hover {
-  color: #006468;
+  color: #afb1b1;
 }
 .active {
-    color: #006468;
-  background-color: #FFCC00;
+    color: #afb1b1;
+  background-color: #666666;
 }
 .collapsibleButton {
-    background-color: #006468;
+    background-color: #afb1b1;
 }
 .active:after {
-    color: #006468;
+    color: #afb1b1;
 }
 #lateral-panel-setup-label {
-    color: #006468;
+    color: #afb1b1;
 }
 .closeModal:hover,
 .closeModal:focus {
-    color: #FFCC00;
+    color: #666666;
 }
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
 .active, .collapsibleButton:hover {
-    background-color: #FFCC00;
+    background-color: #666666;
 }
 
 /* enhance sliders behavior */
@@ -78,8 +78,8 @@ input:checked + .slider:before {
 /* Makes label white */
 .blocklyTreeLabel {
   color: white;
-  font-weight: bold;
-  font-size: 20px;
+  font-weight: 400;
+  font-size: 18px;
 }
 /* Adds padding around the group of categories and separators */
 .blocklyToolboxContents {
@@ -87,7 +87,7 @@ input:checked + .slider:before {
 }
 /* Adds space between the categories, rounds the corners and adds space around the label */
 .blocklyTreeRow {
-  padding: 2px;
+  padding: 15px;
   border-radius: 4px;
   height: initial;
 }

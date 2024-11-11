@@ -300,9 +300,9 @@ Code.uploadCode = function (code, boardId, mode, callback) {
         comma = ","
     }
     
-    if (document.getElementById("detailedCompilation").checked) {
-        url += comma + "verbose=";
-    }
+    // if (document.getElementById("detailedCompilation").checked) {
+    //     url += comma + "verbose=";
+    // }
     request.onreadystatechange = function() {
         if (request.readyState != 4) { 
             return; 

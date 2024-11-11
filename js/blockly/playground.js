@@ -127,10 +127,11 @@ function fontSpacingPageModify(classToModify, spacingToModify) {
 function setOnOffLine() {
     // Set different config online vs local copy.
     if (location.protocol === 'file:') {
-        document.getElementById('verifyButton').disabled = false;
-        document.getElementById('serialButton').disabled = false;
-        document.getElementById('uploadButton').disabled = false;
-        document.getElementById('serialConnectButton').disabled = false;
+        // ปิดก่อนเดี๋ยวโหดเกิน
+        //document.getElementById('verifyButton').disabled = false;
+        //document.getElementById('serialButton').disabled = false;
+        //document.getElementById('uploadButton').disabled = false;
+        //document.getElementById('serialConnectButton').disabled = false;
         document.getElementById('serialMenu').disabled = false;
         // not same button if in Electron or browser, if local nodejs watches events
         document.getElementById('wiringButton').onclick = "";
@@ -142,10 +143,11 @@ function setOnOffLine() {
         document.getElementById('saveXMLButton_span').innerHTML = '<i class="far fa-save"></i>';
         document.getElementById('saveCodeButton_span').innerHTML = '<i class="far fa-file-code"></i>';
     } else {
-        document.getElementById('verifyButton').disabled = true;
-        document.getElementById('serialButton').disabled = true;
-        document.getElementById('uploadButton').disabled = true;
-        document.getElementById('serialConnectButton').disabled = true;
+        // ปิดก่อนเดี๋ยวโหดเกิน
+        //document.getElementById('verifyButton').disabled = true;
+        //document.getElementById('serialButton').disabled = true;
+        //document.getElementById('uploadButton').disabled = true;
+        //document.getElementById('serialConnectButton').disabled = true;
         document.getElementById('serialMenu').disabled = true;
         // not same button if in Electron or browser, if web just webpages launched in browser
         document.getElementById('wiringButton').onclick = "parent.open('tools/hackcable/index.html')";

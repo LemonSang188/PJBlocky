@@ -28,24 +28,24 @@ Code.setBoard = function () {
     profile.default = profile[boardId][0];
 	// change tooltip & info when a board is selected
 	if (boardId != "none") {
-		document.getElementById('boardButton').classList.add('active');
-		document.getElementById('boardButton').title = profile["default"].description;
-		document.getElementById('boardButton').onmouseover = function () {
-			document.getElementById("content_hoverButton").textContent = profile["default"].description;
-		};
-		document.getElementById('boardButton').onmouseout = function () {
-			document.getElementById("content_hoverButton").textContent = "";
-		};
+		// document.getElementById('boardButton').classList.add('active');
+		// document.getElementById('boardButton').title = profile["default"].description;
+		// document.getElementById('boardButton').onmouseover = function () {
+		// 	document.getElementById("content_hoverButton").textContent = profile["default"].description;
+		// };
+		// document.getElementById('boardButton').onmouseout = function () {
+		// 	document.getElementById("content_hoverButton").textContent = "";
+		// };
 	}
 		else {
-			document.getElementById('boardButton').classList.remove('active');
-			document.getElementById('boardButton').title = MSG['boardButtonSpan'];
-			document.getElementById('boardButton').onmouseover = function () {
-				document.getElementById("content_hoverButton").textContent = MSG['boardButtonSpan'];
-			};
-			document.getElementById('boardButton').onmouseout = function () {
-				document.getElementById("content_hoverButton").textContent = "";
-			};
+			// document.getElementById('boardButton').classList.remove('active');
+			// document.getElementById('boardButton').title = MSG['boardButtonSpan'];
+			// document.getElementById('boardButton').onmouseover = function () {
+			// 	document.getElementById("content_hoverButton").textContent = MSG['boardButtonSpan'];
+			// };
+			// document.getElementById('boardButton').onmouseout = function () {
+			// 	document.getElementById("content_hoverButton").textContent = "";
+			// };
 		}
 };
 
@@ -89,24 +89,26 @@ Code.setPort = function ()  {
 	document.getElementById('portListModal').classList.remove('show');
 	document.getElementById("portSelected_span").textContent = ' : ' + newPort;
 	if (newPort != 'none') {
-		document.getElementById('serialButton').classList.add('active');
-		document.getElementById('serialButton').title = newPort;
-		document.getElementById('serialButton').onmouseover = function () {
-			document.getElementById("content_hoverButton").textContent = newPort;
-		};
-		document.getElementById('serialButton').onmouseout = function () {
-			document.getElementById("content_hoverButton").textContent = "";
-		}
+		// ปิดก่อนเดี๋ยวโหดเกิน
+		// document.getElementById('serialButton').classList.add('active');
+		// document.getElementById('serialButton').title = newPort;
+		// document.getElementById('serialButton').onmouseover = function () {
+		// 	document.getElementById("content_hoverButton").textContent = newPort;
+		// };
+		// document.getElementById('serialButton').onmouseout = function () {
+		// 	document.getElementById("content_hoverButton").textContent = "";
+		// }
 	}
 		else {
-			document.getElementById('serialButton').classList.remove('active');
-			document.getElementById('serialButton').title = MSG['serialButtonSpan'];
-			document.getElementById('serialButton').onmouseover = function () {
-				document.getElementById("content_hoverButton").textContent = MSG['serialButtonSpan'];
-			};
-			document.getElementById('serialButton').onmouseout = function () {
-				document.getElementById("content_hoverButton").textContent = "";
-			};
+			// ปิดก่อนเดี๋ยวโหดเกิน
+			// document.getElementById('serialButton').classList.remove('active');
+			// document.getElementById('serialButton').title = MSG['serialButtonSpan'];
+			// document.getElementById('serialButton').onmouseover = function () {
+			// 	document.getElementById("content_hoverButton").textContent = MSG['serialButtonSpan'];
+			// };
+			// document.getElementById('serialButton').onmouseout = function () {
+			// 	document.getElementById("content_hoverButton").textContent = "";
+			// };
 		}
 }
 ;

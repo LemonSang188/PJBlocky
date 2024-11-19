@@ -13,12 +13,12 @@ Code.loadBlocks = function (defaultXml) {
         Blockly.Xml.domToWorkspace(xml, Code.workspace);
     }
 };
-// ปิดก่อนเดี๋ยวโหดเกิน
-// Code.renderContent = function () {
-//     var codePeakPre = document.getElementById('content_code');
-//     var generatedCode = Blockly.Arduino.workspaceToCode(Code.workspace);
-//     editor.setValue(generatedCode, 1);
-// };
+
+Code.renderContent = function () {
+    var codePeakPre = document.getElementById('content_code');
+    var generatedCode = Blockly.Arduino.workspaceToCode(Code.workspace);
+    editor.setValue(generatedCode, 1);
+};
 
 Code.init = function () {
     Code.setBoard();
@@ -198,8 +198,8 @@ Code.init = function () {
             Blockly.svgResize(Code.workspace);
         }
     }
-    //dragElement(document.getElementById("barre_h"), "V", document.getElementById("wrapper_up"), document.getElementById("content_serial"));
-    //dragElement(document.getElementById("separator"), "H", document.getElementById("content_area"), document.getElementById("content_code"));
+    dragElement(document.getElementById("barre_h"), "V", document.getElementById("wrapper_up"), document.getElementById("content_serial"));
+    dragElement(document.getElementById("separator"), "H", document.getElementById("content_area"), document.getElementById("content_code"));
 
     Code.renderContent();
     Code.workspace.addChangeListener(Code.renderContent);
@@ -236,46 +236,40 @@ Code.initLanguage = function () {
     languageMenu.addEventListener('change', Code.changeLanguage, true);
 
     document.title = MSG['title'];
-    //document.getElementById('appName').textContent = MSG['appName'];
+    document.getElementById('appName').textContent = MSG['appName'];
     document.getElementById('languageSpan').textContent = MSG['languageSpan'];
     document.getElementById('interfaceColorSpan').textContent = MSG['interfaceColorSpan'];
     document.getElementById('codeEditorColorSpan').textContent = MSG['codeEditorColorSpan'];
     document.getElementById('themeSpan').textContent = MSG['themeSpan'];
     document.getElementById('renderSpan').textContent = MSG['renderSpan'];
-    // ปิดก่อนเดี๋ยวโหดเกิน
-    //document.getElementById('serialButton').title = MSG['serialButtonSpan'];
-    //document.getElementById('fullScreenButton').title = MSG['fullScreenButton_span'];
-    //document.getElementById('undoButton').title = MSG['undoButton_span'];
-    //document.getElementById('redoButton').title = MSG['redoButton_span'];
-    //document.getElementById('verifyButton').title = MSG['verifyButton_span'];
-    //document.getElementById('uploadButton').title = MSG['uploadButton_span'];
-    //document.getElementById('serialConnectButton').title = MSG['serialConnectButton_span'];
-    //document.getElementById('saveCodeButton').title = MSG['saveCodeButton_span'];
-    //document.getElementById('newButton').title = MSG['newButton_span'];
-    //document.getElementById('saveXMLButton').title = MSG['saveXMLButton_span'];
-    //document.getElementById('loadXMLfakeButton').title = MSG['loadXMLfakeButton_span'];
-    //document.getElementById('resetButton').title = MSG['resetButton_span'];
-    //document.getElementById('newButton_span_menu').textContent = MSG['newButton_span'];
-    //document.getElementById('loadXMLfakeButton_span_menu').textContent = MSG['loadXMLfakeButton_span'];
-    //document.getElementById('saveXMLButton_span_menu').textContent = MSG['saveXMLButton_span'];
-    //document.getElementById('saveCodeButton_span_menu').textContent = MSG['saveCodeButton_span'];
-    //document.getElementById('parametersButton_span_menu').textContent = MSG['setup_sideButton_span'];
-    //document.getElementById('resetButton_span_menu').textContent = MSG['resetButton_span'];
-    
+    document.getElementById('serialButton').title = MSG['serialButtonSpan'];
+    document.getElementById('fullScreenButton').title = MSG['fullScreenButton_span'];
+    document.getElementById('undoButton').title = MSG['undoButton_span'];
+    document.getElementById('redoButton').title = MSG['redoButton_span'];
+    document.getElementById('verifyButton').title = MSG['verifyButton_span'];
+    document.getElementById('uploadButton').title = MSG['uploadButton_span'];
+    document.getElementById('serialConnectButton').title = MSG['serialConnectButton_span'];
+    document.getElementById('saveCodeButton').title = MSG['saveCodeButton_span'];
+    document.getElementById('newButton').title = MSG['newButton_span'];
+    document.getElementById('saveXMLButton').title = MSG['saveXMLButton_span'];
+    document.getElementById('loadXMLfakeButton').title = MSG['loadXMLfakeButton_span'];
+    document.getElementById('resetButton').title = MSG['resetButton_span'];
+    document.getElementById('newButton_span_menu').textContent = MSG['newButton_span'];
+    document.getElementById('loadXMLfakeButton_span_menu').textContent = MSG['loadXMLfakeButton_span'];
+    document.getElementById('saveXMLButton_span_menu').textContent = MSG['saveXMLButton_span'];
+    document.getElementById('saveCodeButton_span_menu').textContent = MSG['saveCodeButton_span'];
+    document.getElementById('parametersButton_span_menu').textContent = MSG['setup_sideButton_span'];
+    document.getElementById('resetButton_span_menu').textContent = MSG['resetButton_span'];
     //document.getElementById('helpButton_span_menu').textContent = MSG['helpButton_span'];
-    // ปิดก่อนเดี๋ยวโหดเกิน
-    //document.getElementById('lateral-panel-setup-label').title = MSG['setup_sideButton_span'];
-    // ปิดก่อนเดี๋ยวโหดเกิน
+    document.getElementById('lateral-panel-setup-label').title = MSG['setup_sideButton_span'];
     //document.getElementById('helpButton').title = MSG['helpButton_span'];
     document.getElementById('helpModalSpan_title').innerHTML = MSG['helpModalSpan_title'];
     document.getElementById('helpModalSpan_text').innerHTML = MSG['helpModalSpan_text'];
     document.getElementById('copyCodeButton').title = MSG['copyCodeButton_span'];
     document.getElementById('keyMappingModalSpan').textContent = MSG['keyMappingModalSpan'];
-    // ปิดก่อนเดี๋ยวโหดเกิน
-    //document.getElementById('detailedCompilation_span').textContent = MSG['detailedCompilation_span'];
+    document.getElementById('detailedCompilation_span').textContent = MSG['detailedCompilation_span'];
     // menu tools
-    // ปิดก่อนเดี๋ยวโหดเกิน
-    //document.getElementById('toolsButton').title = MSG['toolsButton_span'];
+    document.getElementById('toolsButton').title = MSG['toolsButton_span'];
     document.getElementById('wiringButton').title = MSG['wiringButton_span'];
     document.getElementById('factoryButton').title = MSG['factoryButton_span'];
     document.getElementById('htmlButton').title = MSG['htmlButton_span'];
@@ -287,8 +281,7 @@ Code.initLanguage = function () {
     document.getElementById('colorConversionButton_span_menu').textContent = MSG['colorConversionButton_span'];
     document.getElementById('dataConversionButton_span_menu').textContent = MSG['dataConversionButton_span'];
     // menu IoT
-    // ปิดก่อนเดี๋ยวโหดเกิน
-    //document.getElementById('iotConnectButton').title = MSG['iotConnectButton_span'];
+    document.getElementById('iotConnectButton').title = MSG['iotConnectButton_span'];
     document.getElementById('launchWebServer').title = MSG['launchWebServer_span'];
     document.getElementById('papyrusConnect').title = MSG['papyrusConnect_span'];
     document.getElementById('registerToOrchestrator').title = MSG['registerToOrchestrator_span'];

@@ -19,35 +19,35 @@ profile.default = profile["none"][0];
 /**
  * Set board when click in board modal
  */
-Code.setBoard = function () {
-    var boardId = Code.getStringParamFromUrl('board', '');
-    if (!boardId) {
-        boardId = "none";
-    }
-    document.getElementById('boardMenu').value = boardId;
-    profile.default = profile[boardId][0];
-	// change tooltip & info when a board is selected
-	if (boardId != "none") {
-		document.getElementById('boardButton').classList.add('active');
-		document.getElementById('boardButton').title = profile["default"].description;
-		document.getElementById('boardButton').onmouseover = function () {
-			document.getElementById("content_hoverButton").textContent = profile["default"].description;
-		};
-		document.getElementById('boardButton').onmouseout = function () {
-			document.getElementById("content_hoverButton").textContent = "";
-		};
-	}
-		else {
-			document.getElementById('boardButton').classList.remove('active');
-			document.getElementById('boardButton').title = MSG['boardButtonSpan'];
-			document.getElementById('boardButton').onmouseover = function () {
-				document.getElementById("content_hoverButton").textContent = MSG['boardButtonSpan'];
-			};
-			document.getElementById('boardButton').onmouseout = function () {
-				document.getElementById("content_hoverButton").textContent = "";
-			};
-		}
-};
+// Code.setBoard = function () {
+//     var boardId = Code.getStringParamFromUrl('board', '');
+//     if (!boardId) {
+//         boardId = "none";
+//     }
+//     document.getElementById('boardMenu').value = boardId;
+//     profile.default = profile[boardId][0];
+// 	// change tooltip & info when a board is selected
+// 	if (boardId != "none") {
+// 		document.getElementById('boardButton').classList.add('active');
+// 		document.getElementById('boardButton').title = profile["default"].description;
+// 		document.getElementById('boardButton').onmouseover = function () {
+// 			document.getElementById("content_hoverButton").textContent = profile["default"].description;
+// 		};
+// 		document.getElementById('boardButton').onmouseout = function () {
+// 			document.getElementById("content_hoverButton").textContent = "";
+// 		};
+// 	}
+// 		else {
+// 			document.getElementById('boardButton').classList.remove('active');
+// 			document.getElementById('boardButton').title = MSG['boardButtonSpan'];
+// 			document.getElementById('boardButton').onmouseover = function () {
+// 				document.getElementById("content_hoverButton").textContent = MSG['boardButtonSpan'];
+// 			};
+// 			document.getElementById('boardButton').onmouseout = function () {
+// 				document.getElementById("content_hoverButton").textContent = "";
+// 			};
+// 		}
+// };
 
 /**
  * Set board throught URL
@@ -79,34 +79,87 @@ Code.changeBoard = function ()  {
 }
 ;
 
-/**
- * Set COM port
- */
-Code.setPort = function ()  {
-    var serialPortMenu = document.getElementById('serialMenu');
-    var newPort = encodeURIComponent(serialPortMenu.options[serialPortMenu.selectedIndex].value);
-	document.getElementById('overlayForModals').style.display = "none";
-	document.getElementById('portListModal').classList.remove('show');
-	document.getElementById("portSelected_span").textContent = ' : ' + newPort;
-	if (newPort != 'none') {
-		document.getElementById('serialButton').classList.add('active');
-		document.getElementById('serialButton').title = newPort;
-		document.getElementById('serialButton').onmouseover = function () {
-			document.getElementById("content_hoverButton").textContent = newPort;
-		};
-		document.getElementById('serialButton').onmouseout = function () {
-			document.getElementById("content_hoverButton").textContent = "";
-		}
-	}
-		else {
-			document.getElementById('serialButton').classList.remove('active');
-			document.getElementById('serialButton').title = MSG['serialButtonSpan'];
-			document.getElementById('serialButton').onmouseover = function () {
-				document.getElementById("content_hoverButton").textContent = MSG['serialButtonSpan'];
-			};
-			document.getElementById('serialButton').onmouseout = function () {
-				document.getElementById("content_hoverButton").textContent = "";
-			};
-		}
-}
-;
+Code.initializeSerial = async function () {
+    const serialButton = document.getElementById('serialButton');
+    const serialButtonSpan = document.getElementById('serialButton_span');
+	const connectedPortSpan = document.getElementById('connectedPort');
+	const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+
+    const arduinoDevices = {
+        0x0043: "Arduino Uno", // Product ID สำหรับ Arduino Uno
+        0x0010: "Arduino Mega", // Product ID สำหรับ Arduino Mega
+        0x0243: "Arduino Leonardo" // ตัวอย่างเพิ่มเติม
+    };
+
+    // ฟังก์ชันตรวจสอบและอัปเดตสถานะปุ่ม
+    async function updateSerialButton() {
+		let boardName = "";
+        const ports = await navigator.serial.getPorts();
+        const arduinoPort = ports.find(port => {
+            const info = port.getInfo();
+            return arduinoDevices[info.usbProductId];
+        });
+
+        if (arduinoPort) {
+            boardName = arduinoDevices[arduinoPort.getInfo().usbProductId];
+            serialButton.disabled = false;
+            serialButtonSpan.title = `คลิกเพื่อเชื่อมต่อ ${boardName}`;
+			connectedPortSpan.textContent = `มีบอร์ด ${boardName} กำลังรอการเชื่อมต่อ`;
+			statusDot.classList.remove('connected');
+            statusDot.classList.add('disconnected');
+            //statusText.textContent = 'พร้อมเชื่อมต่อ';
+        } else {
+            serialButton.disabled = true;
+            serialButtonSpan.title = "กรุณาเชื่อมต่อ Arduino ก่อน";
+            connectedPortSpan.textContent = `ไม่ได้เชื่อมต่อบอร์ด`;
+            statusDot.classList.remove('disconnected');
+            statusDot.classList.add('connected');
+            //statusText.textContent = 'ไม่พบบอร์ด';
+        }
+
+        // ตั้งค่าเหตุการณ์เมื่อคลิกปุ่ม
+        serialButton.onclick = async function () {
+            if (!arduinoPort) {
+				connectedPortSpan.textContent = `ไม่ได้เชื่อมต่อบอร์ด`;
+                alert("กรุณาเชื่อมต่อ Arduino ก่อน");
+                return;
+            }
+            try {
+                await arduinoPort.open({ baudRate: 9600 });
+                Swal.fire({
+					icon: 'success',
+					title: `เชื่อมต่อกับ ${arduinoDevices[arduinoPort.getInfo().usbProductId]} สำเร็จ`,
+					text: 'การเชื่อมต่อกับ Arduino สำเร็จแล้ว!',
+					confirmButtonText: 'ตกลง'
+				})
+				connectedPortSpan.textContent = `เชื่อมต่อบอร์ด ${boardName} แล้ว`;
+				statusDot.classList.remove('disconnected');
+                statusDot.classList.add('connected');
+                serialButton.disabled = true;
+            } catch (error) {
+                console.error("การเชื่อมต่อล้มเหลว:", error);
+                statusDot.classList.remove('connected');
+                statusDot.classList.add('disconnected');
+            }
+        };
+    }
+
+    // เรียกอัปเดตพอร์ตเมื่อเริ่มต้น
+    await updateSerialButton();
+
+    // ตรวจจับการเชื่อมต่อใหม่
+    navigator.serial.onconnect = async () => {
+        console.log("อุปกรณ์เชื่อมต่อใหม่");
+        await updateSerialButton();
+    };
+
+    // ตรวจจับการถอดอุปกรณ์
+    navigator.serial.ondisconnect = async () => {
+        console.log("อุปกรณ์ถูกถอดออก");
+        await updateSerialButton();
+    };
+};
+
+// เรียกฟังก์ชันเมื่อโหลดหน้าเพจ
+document.addEventListener('DOMContentLoaded', Code.initializeSerial);

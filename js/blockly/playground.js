@@ -143,7 +143,7 @@ function setOnOffLine() {
         document.getElementById('saveCodeButton_span').innerHTML = '<i class="far fa-file-code"></i>';
     } else {
         document.getElementById('verifyButton').disabled = true;
-        document.getElementById('serialButton').disabled = true;
+        //document.getElementById('serialButton').disabled = true;
         document.getElementById('uploadButton').disabled = true;
         document.getElementById('serialConnectButton').disabled = true;
         document.getElementById('serialMenu').disabled = true;

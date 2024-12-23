@@ -32,7 +32,7 @@ var MSG = {
     redoButton_span: "Redo",
     boardButtonSpan: "list boards",
     verifyButton_span: "Verify code",
-    serialButtonSpan: "list COM port",
+    serialButtonSpan: "คลิกเพื่อเชื่อมต่อกับ Board",
     uploadButton_span: "Upload",
     serialConnectButton_span: "Serial monitor",
     saveCodeButton_span: "Export Code",

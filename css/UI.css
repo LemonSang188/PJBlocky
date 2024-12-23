@@ -32,6 +32,10 @@ body {
     background-color: red;
 }
 
+.waiting {
+    background-color: #FFB302;
+}
+
 html[dir=rtl] {
     text-align: right;
 }

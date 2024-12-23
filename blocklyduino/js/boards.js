@@ -89,7 +89,8 @@ Code.initializeSerial = async function () {
     const arduinoDevices = {
         0x0043: "Arduino Uno", // Product ID สำหรับ Arduino Uno
         0x0010: "Arduino Mega", // Product ID สำหรับ Arduino Mega
-        0x0243: "Arduino Leonardo" // ตัวอย่างเพิ่มเติม
+        0x0243: "Arduino Leonardo", // ตัวอย่างเพิ่มเติม
+        0x1002: "Arduino UNO R4 WiFi"
     };
 
     // ฟังก์ชันตรวจสอบและอัปเดตสถานะปุ่ม
@@ -107,14 +108,15 @@ Code.initializeSerial = async function () {
             serialButtonSpan.title = `คลิกเพื่อเชื่อมต่อ ${boardName}`;
 			connectedPortSpan.textContent = `มีบอร์ด ${boardName} กำลังรอการเชื่อมต่อ`;
 			statusDot.classList.remove('connected');
-            statusDot.classList.add('disconnected');
+            statusDot.classList.add('waiting');
             //statusText.textContent = 'พร้อมเชื่อมต่อ';
         } else {
             serialButton.disabled = true;
             serialButtonSpan.title = "กรุณาเชื่อมต่อ Arduino ก่อน";
             connectedPortSpan.textContent = `ไม่ได้เชื่อมต่อบอร์ด`;
-            statusDot.classList.remove('disconnected');
-            statusDot.classList.add('connected');
+            statusDot.classList.remove('connected');
+            statusDot.classList.remove('waiting');
+            statusDot.classList.add('disconnected');
             //statusText.textContent = 'ไม่พบบอร์ด';
         }
 
@@ -122,7 +124,8 @@ Code.initializeSerial = async function () {
         serialButton.onclick = async function () {
             if (!arduinoPort) {
 				connectedPortSpan.textContent = `ไม่ได้เชื่อมต่อบอร์ด`;
-                alert("กรุณาเชื่อมต่อ Arduino ก่อน");
+                statusDot.classList.remove('connected');
+                statusDot.classList.add('disconnected');
                 return;
             }
             try {
@@ -135,11 +138,13 @@ Code.initializeSerial = async function () {
 				})
 				connectedPortSpan.textContent = `เชื่อมต่อบอร์ด ${boardName} แล้ว`;
 				statusDot.classList.remove('disconnected');
+                statusDot.classList.remove('waiting');
                 statusDot.classList.add('connected');
                 serialButton.disabled = true;
             } catch (error) {
                 console.error("การเชื่อมต่อล้มเหลว:", error);
                 statusDot.classList.remove('connected');
+                statusDot.classList.remove('waiting');
                 statusDot.classList.add('disconnected');
             }
         };

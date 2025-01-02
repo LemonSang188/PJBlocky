@@ -256,22 +256,81 @@ Code.verifyCodeFile = function () {
   * Arduino IDE with the --verify flag.
   */
 
-Code.uploadCodeFile = function () {
-    var code = Blockly.Arduino.workspaceToCode(Code.workspace);
-    var boardId = Code.getStringParamFromUrl('board', '');
+//const { exec } = require('child_process')
+
+// Code.uploadCodeFile = function () {
     
-    alert("Ready to upload to Arduino.");
+//     // var code = Blockly.Arduino.workspaceToCode(Code.workspace);
+//     // var boardId = Code.getStringParamFromUrl('board', '');
     
-    Code.uploadCode(code, boardId, 'upload', 
-                    function(status, response, errorInfo) {
-                        var element = document.getElementById("content_serial");
-                        element.innerHTML = response;
-                        if (status == 200) {
-                            alert("Program uploaded ok");
-                        } else {
-                            alert("Error uploading program: " + errorInfo);
-                        }
-                    });
+//     // alert("Ready to upload to Arduino.");
+    
+//     // Code.uploadCode(code, boardId, 'upload', 
+//     //                 function(status, response, errorInfo) {
+//     //                     var element = document.getElementById("content_serial");
+//     //                     element.innerHTML = response;
+//     //                     if (status == 200) {
+//     //                         alert("Program uploaded ok");
+//     //                     } else {
+//     //                         alert("Error uploading program: " + errorInfo);
+//     //                     }
+//     //                 });
+// };
+
+Code.uploadCodeFile = async function () {
+    const code = Blockly.Arduino.workspaceToCode(Code.workspace); // หรือโค้ดอื่นที่ได้จาก Blockly
+
+    const arduinoDevices = {
+        0x0043: "Arduino Uno",
+        0x0010: "Arduino Mega",
+        0x0243: "Arduino Leonardo",
+        0x1002: "Arduino UNO R4 WiFi"
+    };
+
+    const ports = await navigator.serial.getPorts();
+
+    const arduinoPort = ports.find(port => {
+        const info = port.getInfo();
+        return arduinoDevices[info.usbProductId];
+    });
+
+    if (!arduinoPort) {
+        alert("กรุณาเชื่อมต่อกับ Arduino ก่อน");
+        return;
+    }
+
+    const portInfo = arduinoPort.getInfo();
+    const boardName = arduinoDevices[portInfo.usbProductId] || "Unknown Board";
+
+    try {
+        await arduinoPort.close(); // ปิดพอร์ตในฝั่ง Frontend
+
+        const response = await fetch('http://localhost:8080/upload-code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                code,
+                productId: portInfo.usbProductId,
+                vendorId: portInfo.usbVendorId,
+                boardName: boardName
+            })
+        });
+
+        const result = await response.text();
+        console.log(result);
+        alert('Upload Successful: ' + result);
+    } catch (error) {
+        console.error('Error during upload:', error);
+        alert('Error: ' + error);
+    } finally {
+        // เปิดพอร์ตใน Frontend หลังจากเสร็จสิ้นการอัปโหลด
+        try {
+            await arduinoPort.open({ baudRate: 9600 });
+            console.log('Reconnected to port');
+        } catch (error) {
+            console.error('Error reconnecting to port:', error);
+        }
+    }
 };
 
 Code.uploadCode = function (code, boardId, mode, callback) {

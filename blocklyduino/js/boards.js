@@ -82,25 +82,42 @@ Code.changeBoard = function ()  {
 Code.initializeSerial = async function () {
     const serialButton = document.getElementById('serialButton');
     const serialButtonSpan = document.getElementById('serialButton_span');
+    const authorizeButton = document.getElementById('authorizeButton');
+    const authorizeButtonSpan = document.getElementById('authorizeButton_span');
 	const connectedPortSpan = document.getElementById('connectedPort');
 	const statusDot = document.getElementById('statusDot');
     const statusText = document.getElementById('statusText');
 
     const arduinoDevices = {
-        0x0043: "Arduino Uno", // Product ID สำหรับ Arduino Uno
-        0x0010: "Arduino Mega", // Product ID สำหรับ Arduino Mega
-        0x0243: "Arduino Leonardo", // ตัวอย่างเพิ่มเติม
+        0x0043: "Arduino Uno",
+        0x0010: "Arduino Mega",
+        0x0243: "Arduino Leonardo",
         0x1002: "Arduino UNO R4 WiFi"
     };
+
+    authorizeButtonSpan.title = "คลิกเพื่อค้นหา Port การเชื่อมต่อ";
 
     // ฟังก์ชันตรวจสอบและอัปเดตสถานะปุ่ม
     async function updateSerialButton() {
 		let boardName = "";
         const ports = await navigator.serial.getPorts();
+        
         const arduinoPort = ports.find(port => {
             const info = port.getInfo();
             return arduinoDevices[info.usbProductId];
         });
+
+        if (ports.length === 0 && !arduinoPort) {
+            serialButton.disabled = true;
+            connectedPortSpan.textContent = `กรุณาเชื่อมต่อบอร์ด Arduino และกดลงทะเบียนบอร์ดกับระบบ`;
+            statusDot.classList.remove('connected');
+            statusDot.classList.remove('waiting');
+            statusDot.classList.add('disconnected');
+            return;
+        } else {
+            const authorizeButton = document.getElementById('authorizeButton');
+            authorizeButton.disabled = true;
+        }
 
         if (arduinoPort) {
             boardName = arduinoDevices[arduinoPort.getInfo().usbProductId];
@@ -108,8 +125,8 @@ Code.initializeSerial = async function () {
             serialButtonSpan.title = `คลิกเพื่อเชื่อมต่อ ${boardName}`;
 			connectedPortSpan.textContent = `มีบอร์ด ${boardName} กำลังรอการเชื่อมต่อ`;
 			statusDot.classList.remove('connected');
+            statusDot.classList.remove('disconnected');
             statusDot.classList.add('waiting');
-            //statusText.textContent = 'พร้อมเชื่อมต่อ';
         } else {
             serialButton.disabled = true;
             serialButtonSpan.title = "กรุณาเชื่อมต่อ Arduino ก่อน";
@@ -117,7 +134,6 @@ Code.initializeSerial = async function () {
             statusDot.classList.remove('connected');
             statusDot.classList.remove('waiting');
             statusDot.classList.add('disconnected');
-            //statusText.textContent = 'ไม่พบบอร์ด';
         }
 
         // ตั้งค่าเหตุการณ์เมื่อคลิกปุ่ม
@@ -134,7 +150,8 @@ Code.initializeSerial = async function () {
 					icon: 'success',
 					title: `เชื่อมต่อกับ ${arduinoDevices[arduinoPort.getInfo().usbProductId]} สำเร็จ`,
 					text: 'การเชื่อมต่อกับ Arduino สำเร็จแล้ว!',
-					confirmButtonText: 'ตกลง'
+					confirmButtonText: 'ตกลง',
+                    allowOutsideClick: false
 				})
 				connectedPortSpan.textContent = `เชื่อมต่อบอร์ด ${boardName} แล้ว`;
 				statusDot.classList.remove('disconnected');
@@ -165,6 +182,31 @@ Code.initializeSerial = async function () {
         await updateSerialButton();
     };
 };
+
+document.getElementById('authorizeButton').onclick = async function () {
+    try {
+        const isFirstTime = !localStorage.getItem('registeredPorts');
+
+        const port = await navigator.serial.requestPort();    
+        Swal.fire({
+            icon: 'success',
+            title: 'อนุญาตเชื่อมต่อสำเร็จ',
+            text: 'พร้อมใช้งานแล้ว กรุณาทำการกด Connect กับ Board อีกรอบ',
+            confirmButtonText: 'ตกลง',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const registeredPorts = JSON.parse(localStorage.getItem('registeredPorts') || '[]');
+                const portInfo = port.getInfo();
+                registeredPorts.push(portInfo);
+                localStorage.setItem('registeredPorts', JSON.stringify(registeredPorts));
+                Code.initializeSerial();
+            }
+        });
+    } catch (error) {
+        console.error('Authorization failed:', error);
+    }
+}
 
 // เรียกฟังก์ชันเมื่อโหลดหน้าเพจ
 document.addEventListener('DOMContentLoaded', Code.initializeSerial);

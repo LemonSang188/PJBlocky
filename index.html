@@ -103,6 +103,11 @@
                                 <i class="fab fa-usb"></i>
                             </span>
                         </button>
+                        <button id="authorizeButton" onclick="Code.initializeSerial()" class="iconButtons">
+                            <span id="authorizeButton_span">
+                                <i class="fas fa-key"></i>
+                            </span>
+                        </button>
                         <button id="uploadButton" class="iconButtons" onclick="Code.uploadCodeFile()">
                             <span id="uploadButton_span">
                                 <i class="fas fa-sign-out-alt"></i>
@@ -452,6 +457,7 @@
     </body>
     <!-- Swal2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.15.3/dist/sweetalert2.all.min.js"></script>
+    <script src="dist/bundle.js"></script>
     <!-- Blockly libraries -->
     <script src="./@blockly/blockly_compressed.js"></script>
     <script src="./@blockly/blocks_compressed.js"></script>

@@ -138,6 +138,10 @@ Blockly.Arduino.init = function (workspace) {
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
+const testCode = `
+Serial.println("✅ Upload success at millis: " + String(millis()));
+delay(1000);
+`;
 Blockly.Arduino.finish = function (code) {
     var includes = [],
         definitions = [],
@@ -191,9 +195,125 @@ Blockly.Arduino.finish = function (code) {
     delete Blockly.Arduino.setups_;
     delete Blockly.Arduino.pins_;
     Blockly.Arduino.variableDB_.reset();
-    var allDefs = includes.join('\n') + definitions.join('\n') + variables.join('\n') + functions.join('\n');
-    var setup = 'void setup() {' + setups.join('\n  ') + '\n}\n\n';
-    var loop = 'void loop() {\n  ' + code.replace(/\n/g, '\n  ') + '\n}';
+
+      const sensorHeader = `
+    // === Pin Definitions ===
+    #define TRIG_PIN 1
+    #define ECHO_PIN 3
+    #define MQ2_ANALOG A1
+    #define MQ2_DIGITAL 2
+    #define LM35_PIN A0
+    #define RGB_R 9
+    #define RGB_G 10
+    #define RGB_B 11
+
+    // === Global Variables ===
+    long duration;
+    float distance;
+    int gasValue = 0;
+    bool gasDetected = false;
+    int tempValue = 0;
+    float temperatureC = 0.0;
+    `;
+
+    const sensorSetup = `
+    pinMode(TRIG_PIN, OUTPUT);
+    pinMode(ECHO_PIN, INPUT);
+    pinMode(MQ2_DIGITAL, INPUT);
+    // LM35 doesn't need pinMode because analogRead handles it
+    `;
+
+    const rgbLoopCode = `
+    // ปิดไฟทั้งหมด
+    analogWrite(RGB_R, 0);
+    analogWrite(RGB_G, 0);
+    analogWrite(RGB_B, 0);
+    delay(500);
+
+    // แสดงสีแดง
+    analogWrite(RGB_R, 255);
+    analogWrite(RGB_G, 0);
+    analogWrite(RGB_B, 0);
+    delay(500);
+
+    // แสดงสีเขียว
+    analogWrite(RGB_R, 0);
+    analogWrite(RGB_G, 255);
+    analogWrite(RGB_B, 0);
+    delay(500);
+
+    // แสดงสีน้ำเงิน
+    analogWrite(RGB_R, 0);
+    analogWrite(RGB_G, 0);
+    analogWrite(RGB_B, 255);
+    delay(500);
+
+    // แสดงสีขาว
+    analogWrite(RGB_R, 255);
+    analogWrite(RGB_G, 255);
+    analogWrite(RGB_B, 255);
+    delay(500);
+    `;
+
+    const ultrasonicLoopCode = `
+    digitalWrite(TRIG_PIN, LOW);
+    delayMicroseconds(2);
+    digitalWrite(TRIG_PIN, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG_PIN, LOW);
+
+    duration = pulseIn(ECHO_PIN, HIGH);
+    distance = duration * 0.034 / 2;
+
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.println(" cm");
+    `;
+
+    const mq2LoopCode = `
+    gasValue = analogRead(MQ2_ANALOG);
+    gasDetected = digitalRead(MQ2_DIGITAL);
+
+    Serial.print("Gas Value (analog): ");
+    Serial.print(gasValue);
+
+    if (gasDetected == LOW) {
+        Serial.println(" - ⚠️ Gas Detected!");
+    } else {
+        Serial.println(" - ✅ Normal");
+    }
+    `;
+
+    const lm35LoopCode = `
+    tempValue = analogRead(LM35_PIN);
+    float mv = tempValue * (5.0 / 1023.0);
+    float cel = mv * 100.0;
+
+    Serial.print("Temperature: ");
+    Serial.print(cel);
+    Serial.println(" °C");
+    `;
+
+    const fullLoopCode =
+        ultrasonicLoopCode +
+        mq2LoopCode +
+        lm35LoopCode +
+        rgbLoopCode +
+        '\n' +
+        code.replace(/\n/g, '\n  ') +
+        '\n  delay(500);';
+
+    const allDefs =
+        sensorHeader +
+        '\n' +
+        includes.join('\n') +
+        definitions.join('\n') +
+        variables.join('\n') +
+        functions.join('\n');
+
+    const setup = 'void setup() {\n  Serial.begin(9600);' + sensorSetup + setups.join('\n  ') + '\n}\n\n';
+    const loop = 'void loop() {\n  ' + fullLoopCode + '\n}';
+
     return allDefs + setup + loop;
 };
 

@@ -232,22 +232,94 @@ Code.saveCodeFile = function () {
   * Arduino IDE with the --verify flag.
   */
 
-Code.verifyCodeFile = function () {
+function formatArduinoError(rawError) {
+    if (!rawError) return "ไม่พบข้อความ error";
+  
+    // แยกบรรทัดออกมา
+    const lines = rawError.split('\n');
+  
+    // กรองบรรทัดที่ไม่จำเป็น เช่น path ยาวๆ
+    const filtered = lines.filter(line => {
+      return !line.includes("AppData") && !line.includes("Temp") && !line.trim().startsWith("C:") && line.trim() !== "";
+    });
+  
+    // แปลงแต่ละบรรทัดให้เป็น <br>
+    return filtered.map(line => line.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')).join('<br>');
+}
+
+Code.verifyCodeFile = async function () {
     var code = Blockly.Arduino.workspaceToCode(Code.workspace);
-    var boardId = Code.getStringParamFromUrl('board', '');
+    const boardId = Code.getStringParamFromUrl('board', 'arduino:avr:uno');
+    const element = document.getElementById("content_serial");
     
-    alert("Ready to verify to Arduino.");
+    if (!code || code.trim() === '') {
+        Swal.fire({
+            icon: 'warning',
+            title: 'ไม่มีโค้ดให้ตรวจสอบ',
+            text: 'โปรดสร้างโค้ดด้วยบล็อกก่อนกด Verify',
+            confirmButtonText: 'ตกลง'
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: 'กำลังตรวจสอบโค้ด...',
+        text: 'กรุณารอสักครู่',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
     
-    Code.uploadCode(code, boardId, 'verify', 
-                    function(status, response, errorInfo) {
-                        var element = document.getElementById("content_serial");
-                        element.innerHTML = response;
-                        if (status == 200) {
-                            alert("Program verified ok");
-                        } else {
-                            alert("Error verifying program: " + errorInfo);
-                        }
-                    });
+    try {
+        const response = await fetch('http://localhost:8080/verify-code', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                code: code,
+                boardName: boardId
+            })
+        });
+
+        const data = await response.json();
+        const formatted = formatArduinoError(data.error);
+
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'ตรวจสอบสำเร็จ',
+                text: 'โค้ดสามารถคอมไพล์ได้ถูกต้อง',
+                confirmButtonText: 'ตกลง',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            });
+            element.innerHTML = `<pre style="color:green;">${data.message}</pre>`;
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Syntax Code ไม่ถูกต้อง',
+                html: `<pre style="text-align: left;">${formatted}</pre>`,
+                width: 700,
+                confirmButtonText: 'ตกลง',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            });
+            element.innerHTML = `<pre style="color:red;">${data.error}</pre>`;
+        }
+    } catch (err) {
+        console.error('เกิดข้อผิดพลาดในการเรียก API:', err);
+        Swal.fire({
+            icon: 'error',
+            title: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
+            text: 'โปรดตรวจสอบว่า backend ทำงานอยู่หรือไม่',
+            confirmButtonText: 'ตกลง',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+        });
+        element.innerHTML = `<pre style="color:red;">ไม่สามารถติดต่อ backend ได้</pre>`;
+    }
 };
 
 /**
@@ -255,36 +327,14 @@ Code.verifyCodeFile = function () {
   * and posts it to http://127.0.0.1/upload/ which will pass it to the 
   * Arduino IDE with the --verify flag.
   */
-
-//const { exec } = require('child_process')
-
-// Code.uploadCodeFile = function () {
-    
-//     // var code = Blockly.Arduino.workspaceToCode(Code.workspace);
-//     // var boardId = Code.getStringParamFromUrl('board', '');
-    
-//     // alert("Ready to upload to Arduino.");
-    
-//     // Code.uploadCode(code, boardId, 'upload', 
-//     //                 function(status, response, errorInfo) {
-//     //                     var element = document.getElementById("content_serial");
-//     //                     element.innerHTML = response;
-//     //                     if (status == 200) {
-//     //                         alert("Program uploaded ok");
-//     //                     } else {
-//     //                         alert("Error uploading program: " + errorInfo);
-//     //                     }
-//     //                 });
-// };
-
 Code.uploadCodeFile = async function () {
     const code = Blockly.Arduino.workspaceToCode(Code.workspace); // หรือโค้ดอื่นที่ได้จาก Blockly
 
     const arduinoDevices = {
-        0x0043: "Arduino Uno",
-        0x0010: "Arduino Mega",
-        0x0243: "Arduino Leonardo",
-        0x1002: "Arduino UNO R4 WiFi"
+        0x0043: "arduino:avr:uno",
+        0x0010: "arduino:avr:mega",
+        0x0243: "arduino:avr:leonardo",
+        0x1002: "arduino:renesas_uno:unor4wifi"
     };
 
     const ports = await navigator.serial.getPorts();

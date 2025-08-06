@@ -262,7 +262,7 @@ Blockly.Arduino['text_getSubstring'] = function (block) {
                                     // Print statement.
                                     var msg = Blockly.Arduino.valueToCode(block, 'TEXT',
                                             Blockly.Arduino.ORDER_NONE) || '\'\'';
-                                    return 'window.alert(' + msg + ');\n';
+                                    return 'Serial.println(' + msg + ');\n';
                                 };
 
                                 Blockly.Arduino['text_prompt_ext'] = function (block) {

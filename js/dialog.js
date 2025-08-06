@@ -226,12 +226,12 @@ document.getElementById('resetButton').onmouseover = function () {
 document.getElementById('resetButton').onmouseout = function () {
     document.getElementById("content_hoverButton").textContent = "";
 };
-document.getElementById('parametersButton').onmouseover = function () {
-    document.getElementById("content_hoverButton").textContent = MSG['setup_sideButton_span'];
-};
-document.getElementById('parametersButton').onmouseout = function () {
-    document.getElementById("content_hoverButton").textContent = "";
-};
+// document.getElementById('parametersButton').onmouseover = function () {
+//     document.getElementById("content_hoverButton").textContent = MSG['setup_sideButton_span'];
+// };
+// document.getElementById('parametersButton').onmouseout = function () {
+//     document.getElementById("content_hoverButton").textContent = "";
+// };
 // document.getElementById('helpButton').onmouseover = function () {
 //     document.getElementById("content_hoverButton").textContent = MSG['helpButton_span'];
 // };

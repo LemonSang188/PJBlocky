@@ -14,8 +14,12 @@
     "webpack-dev-server": "^5.2.0"
   },
   "dependencies": {
+    "body-parser": "^2.2.0",
+    "child_process": "^1.0.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "serialport": "^13.0.0"
+    "fs": "^0.0.1-security",
+    "serialport": "^13.0.0",
+    "tmp": "^0.2.3"
   }
 }

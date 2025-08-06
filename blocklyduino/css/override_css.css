@@ -98,3 +98,109 @@ input:checked + .slider:before {
   vertical-align: middle;
   width: 25px;
 }
+
+/* Block Logic */
+[aria-selected="false"] #LOGIC {
+  background-color: orange !important;
+}
+
+[aria-selected="true"] .blocklyTreeLabel[id="LOGIC.label"] {
+  color: orange !important;
+}
+
+[aria-selected="true"] .customIcon.fa.fa-project-diagram {
+  color: orange !important; 
+}
+
+path.blocklyPathDark[fill="#496684"] {
+  fill: orange !important;
+}
+
+path.blocklyPath[fill="#5b80a5"] {
+  fill: orange !important;
+}
+
+path.blocklyPathLight[stroke="#8ca6c0"] {
+  stroke: orange !important;
+}
+
+/* Block Text */
+[aria-selected="false"] #TEXT {
+  background-color: purple !important;
+}
+
+[aria-selected="true"] .blocklyTreeLabel[id="TEXT.label"] {
+  color: purple !important;
+}
+
+[aria-selected="true"] .customIcon.fa.fa-quote-left {
+  color: purple !important; 
+}
+
+path.blocklyPathDark[fill="#498470"] {
+  fill: purple !important;
+}
+
+path.blocklyPath[fill="#5ba58c"] {
+  fill: purple !important;
+}
+path.blocklyPath[fill="#bddbd1"] {
+  fill: rgb(211, 150, 211) !important;
+}
+
+path.blocklyPathLight[stroke="#8cc0af"] {
+  stroke: purple !important;
+}
+
+/* Block Function */
+[aria-selected="false"] #FUNCTIONS {
+  background-color: palevioletred !important;
+}
+
+[aria-selected="true"] .blocklyTreeLabel[id="FUNCTIONS.label"] {
+  color: palevioletred !important;
+}
+
+[aria-selected="true"] .customIcon.fab.fa-whmcs {
+  color: palevioletred !important; 
+}
+
+path.blocklyPathDark[fill="#7a4984"] {
+  fill: palevioletred !important;
+}
+
+path.blocklyPath[fill="#995ba5"] {
+  fill: palevioletred !important;
+}
+
+path.blocklyPathLight[stroke="#b88cc0"] {
+  stroke: palevioletred !important;
+}
+
+/* Block Math */
+[aria-selected="false"] #MATH {
+  background-color: #29b6f6 !important;
+}
+
+[aria-selected="true"] .blocklyTreeLabel[id="MATH.label"] {
+  color: #29b6f6 !important;
+}
+
+[aria-selected="true"] .customIcon.fa.fa-calculator {
+  color: #29b6f6 !important; 
+}
+
+path.blocklyPathDark[fill="#495284"] {
+  fill: #29b6f6 !important;
+}
+
+path.blocklyPath[fill="#5b67a5"] {
+  fill: #29b6f6 !important;
+}
+path.blocklyPath[fill="#bdc2db"] {
+  fill: #b3e5fc !important;
+}
+
+path.blocklyPathLight[stroke="#8c95c0"] {
+  stroke: #29b6f6 !important;
+}

@@ -1,91 +1,142 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // นำเข้า cors package
+const cors = require('cors');
+const fs = require('fs');
+const tmp = require('tmp');
+const { exec } = require('child_process');
+
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
-
-// สร้าง app ด้วย express
 const app = express();
 const port = 8080;
 
-// ใช้ cors middleware เพื่ออนุญาตการเข้าถึงจาก origin อื่น
-app.use(cors()); // เปิดใช้งาน CORS
-
-// ใช้ body-parser เพื่อแปลง JSON request body
+app.use(cors());
 app.use(bodyParser.json());
 
-async function openSerialPort(portName, code, res) {
-  console.log('Port Name:', portName);
+app.post('/verify-code', async (req, res) => {
+  const { code, boardName } = req.body;
 
-  try {
-    // ตรวจสอบว่าพอร์ตที่ต้องการใช้งานมีอยู่จริง
-    const ports = await SerialPort.list();
-    const targetPort = ports.find(p => p.path === portName);
+  if (!code || !boardName) {
+    return res.status(400).send('Missing code or boardName');
+  }
 
-    if (!targetPort) {
-      res.status(404).send(`Port ${portName} not found`);
-      return;
+  // สร้างโฟลเดอร์ชั่วคราว
+  tmp.dir({ unsafeCleanup: true }, (err, tempDirPath, cleanupCallback) => {
+    if (err) {
+      console.error('Failed to create temp dir:', err);
+      return res.status(500).send('Failed to create temporary folder');
     }
 
-    // ตั้งค่า Serial Port
-    const serialPort = new SerialPort({
-      path: portName,
-      baudRate: 9600,
-      autoOpen: false, // เปิดพอร์ตด้วย manual
-    });
+    const sketchName = 'SketchBlockly';
+    const sketchFolder = `${tempDirPath}/${sketchName}`;
+    const sketchFilePath = `${sketchFolder}/${sketchName}.ino`;
 
-    // เปิดพอร์ต
-    serialPort.open(err => {
-      if (err) {
-        if (err.message.includes('Access denied')) {
-          res.status(403).send('Access denied: Another program may be using this port');
-        } else {
-          res.status(500).send(`Failed to open serial port: ${err.message}`);
-        }
-        return;
+    // สร้างโฟลเดอร์ย่อย
+    fs.mkdirSync(sketchFolder);
+
+    // เขียนไฟล์ลงในโฟลเดอร์ย่อย
+    fs.writeFileSync(sketchFilePath, code);
+
+    const arduinoCliPath = `"tools/arduino-cli.exe"`;
+    const cmd = `${arduinoCliPath} compile --fqbn ${boardName} "${sketchFolder}"`;
+
+    exec(cmd, (error, stdout, stderr) => {
+      cleanupCallback();
+
+      if (error) {
+        console.error('❌ Compile error:\n', stderr || stdout);
+        return res.status(400).json({
+          success: false,
+          error: stderr || stdout || error.message
+        });
       }
 
-      console.log(`Serial port ${portName} opened`);
-
-      // ส่งโค้ดไปยังบอร์ด Arduino
-      serialPort.write("Hi Mom!", error => {
-        if (error) {
-          res.status(500).send('Failed to send data to the device');
-        } else {
-          console.log('Code sent successfully');
-          res.status(200).send('Code uploaded successfully');
-        }
-      });
-
-      // รับข้อมูลจากอุปกรณ์ (Arduino)
-      const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\n' }));
-      parser.on('data', data => {
-        console.log('Received from Arduino:', data);
-      });
-
-      // ตรวจสอบให้แน่ใจว่าโปรแกรมไม่ได้ปิดพอร์ตเร็วเกินไป
-      serialPort.on('close', () => {
-        console.log('Serial port closed');
+      console.log('✅ Compile success:\n', stdout);
+      res.status(200).json({
+        success: true,
+        message: stdout
       });
     });
-  } catch (error) {
-    console.error('Unexpected error:', error);
-    res.status(500).send('Unexpected error occurred');
-  }
-}
+  });
+});
 
-// เมื่อได้รับคำขอ POST ที่ endpoint /upload-code
 app.post('/upload-code', async (req, res) => {
   const { code, productId, vendorId, boardName } = req.body;
+
+  if (!code || !boardName || !productId || !vendorId) {
+    return res.status(400).send('Missing required parameters');
+  }
+
   const ports = await SerialPort.list();
-  const mapPort = ports.filter(p => {
+  const targetPort = ports.find(p => {
     const portVendorId = p.vendorId ? parseInt(p.vendorId, 16) : null;
     const portProductId = p.productId ? parseInt(p.productId, 16) : null;
-  
     return portVendorId === vendorId && portProductId === productId;
-  });  
-  
-  openSerialPort(mapPort[0].path, code, res)
+  });
+
+  if (!targetPort) {
+    return res.status(404).send('Target serial port not found');
+  }
+
+  tmp.dir({ unsafeCleanup: true }, (err, tempDirPath, cleanupCallback) => {
+    if (err) {
+      console.error('Failed to create temp dir:', err);
+      return res.status(500).send('Failed to create temporary folder');
+    }
+
+    const sketchName = 'SketchBlockly';
+    const sketchFolder = `${tempDirPath}/${sketchName}`;
+    const sketchFilePath = `${sketchFolder}/${sketchName}.ino`;
+
+    try {
+      fs.mkdirSync(sketchFolder);
+      fs.writeFileSync(sketchFilePath, code);
+    } catch (e) {
+      console.error('Failed to write sketch file:', e);
+      cleanupCallback();
+      return res.status(500).send('Failed to write sketch file');
+    }
+
+    const arduinoCliPath = path.resolve(__dirname, '../tools/arduino-cli.exe');
+    const compileCmd = `"${arduinoCliPath}" compile --fqbn ${boardName} "${sketchFolder}"`;
+    const uploadCmd = `"${arduinoCliPath}" upload -p "${targetPort.path}" --fqbn ${boardName} "${sketchFolder}"`;
+
+    console.log(`Compiling for board: ${boardName} at port ${targetPort.path}`);
+    console.log(`arduinoCliPath : ${arduinoCliPath}`);
+    console.log(`compileCmd : ${compileCmd}`);
+
+    exec(compileCmd, (error, stdout, stderr) => {
+      if (error) {
+        console.error('❌ Compile error:\n', stderr || stdout);
+        cleanupCallback();
+        return res.status(400).json({
+          success: false,
+          error: stderr || stdout || error.message
+        });
+      }
+
+      console.log('✅ Compile success, now uploading...');
+
+      exec(uploadCmd, (error, stdout, stderr) => {
+        cleanupCallback();
+
+        if (error) {
+          console.error('❌ Upload error:\n', stderr || stdout);
+          return res.status(400).json({
+            success: false,
+            error: stderr || stdout || error.message
+          });
+        }
+
+        console.log('✅ Upload success:\n', stdout);
+        res.status(200).json({
+          success: true,
+          message: stdout
+        });
+      });
+    });
+  });
 });
 
 app.get('/list-ports', async (req, res) => {
@@ -106,7 +157,6 @@ app.get('/list-ports', async (req, res) => {
   }
 });
 
-// เริ่มฟังการเชื่อมต่อที่พอร์ต 8080
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

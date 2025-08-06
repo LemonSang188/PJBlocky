@@ -25,7 +25,7 @@
                     </td>
                     <td id="optionsTopInteractiveHelp" class="tabMiddle" style="width: 100%; display: flex; justify-content: flex-end; align-items: center;">
                         <span id="statusDot" class="status-dot"></span> 
-                        <span id="connectedPort" style="padding-right: 50px;">
+                        <span id="connectedPort" style="padding-right: 20px;">
                         </span>
                     </td>
                 </tr>
@@ -40,32 +40,38 @@
                             <div id="buttonsMenuPopup" class="menu_div">
                                 <div id="buttonsMenuPopupInside">
                                     <button id="newButton" class="iconButtons" onclick="Code.newProject()">
-                                        <span id="newButton_span"></span>
+                                        <span id="newButton_span">
+                                            <i class="fas fa-plus"></i>
+                                        </span>
                                     </button>
                                     <span id="newButton_span_menu" class="menu_text"></span>
                                     <br>
                                     <button id="loadXMLfakeButton" class="iconButtons" onclick="Code.loadXmlBlocklyFile()">
-                                        <span id="loadXMLfakeButton_span"></span>
+                                        <span id="loadXMLfakeButton_span">
+                                            <i class="fas fa-download"></i>
+                                        </span>
                                     </button>
                                     <span id="loadXMLfakeButton_span_menu" class="menu_text"></span>
                                     <br>
                                     <button id="saveXMLButton" class="iconButtons" onclick="Code.saveXmlBlocklyFile()">
-                                        <span id="saveXMLButton_span"></span>
+                                        <span id="saveXMLButton_span">
+                                            <i class="fas fa-save"></i>
+                                        </span>
                                     </button>
                                     <span id="saveXMLButton_span_menu" class="menu_text"></span>
                                     <br>
                                     <button id="saveCodeButton" class="iconButtons" onclick="Code.saveCodeFile()">
-                                        <span id="saveCodeButton_span"></span>
+                                        <span id="saveCodeButton_span">
+                                            <i class="fas fa-file-export"></i>
+                                        </span>
                                     </button>
                                     <span id="saveCodeButton_span_menu" class="menu_text"></span>
-                                    <br>
-                                    <hr>
-                                    <button id="parametersButton" class="iconButtons" onclick="document.getElementById('lateral-panel-setup-input').click();">
+                                    <!-- <button id="parametersButton" class="iconButtons" onclick="document.getElementById('lateral-panel-setup-input').click();">
                                         <span id="parametersButton_span">
                                             <i class="fas fa-cog"></i>
                                         </span>
-                                    </button>
-                                    <span id="parametersButton_span_menu" class="menu_text"></span>
+                                    </button> -->
+                                    <!-- <span id="parametersButton_span_menu" class="menu_text"></span> -->
                                     <br>
                                     <hr>
                                     <button id="resetButton" class="iconButtons" onclick="Code.ResetWorkspace()">
@@ -74,7 +80,6 @@
                                         </span>
                                     </button>
                                     <span id="resetButton_span_menu" class="menu_text"></span>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -105,12 +110,12 @@
                         </button>
                         <button id="authorizeButton" onclick="Code.initializeSerial()" class="iconButtons">
                             <span id="authorizeButton_span">
-                                <i class="fas fa-key"></i>
+                                <i class="fas fa-wifi"></i>
                             </span>
                         </button>
                         <button id="uploadButton" class="iconButtons" onclick="Code.uploadCodeFile()">
                             <span id="uploadButton_span">
-                                <i class="fas fa-sign-out-alt"></i>
+                                <i class="fas fa-upload"></i>
                             </span>
                         </button>
                         <!-- <button id="serialConnectButton" class="iconButtons">
@@ -177,11 +182,11 @@
         </div>
         <div id="lateral-panel-setup">
             <input id="lateral-panel-setup-input" type="checkbox">
-            <label id="lateral-panel-setup-label" for="lateral-panel-setup-input" class="label_panel">
+            <!-- <label id="lateral-panel-setup-label" for="lateral-panel-setup-input" class="label_panel">
                 <span id="setup_side_span">
                     <i class="fas fa-cog"></i>
                 </span>
-            </label>
+            </label> -->
             <div id="lateral-panel-setup-bloc">
                 <button class="accordion">
                     <span id="config_UI_title_span" aria-expanded="false" aria-controls="accordion_setup_content"></span>

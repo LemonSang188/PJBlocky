@@ -95,7 +95,7 @@
 }
 #resetButton:hover{
     background: #FFFFFF;
-    cursor: no-drop;
+    /* cursor: no-drop; */
 }
 #helpButton{
     border-radius: 5px;

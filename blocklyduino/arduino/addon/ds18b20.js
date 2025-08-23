@@ -16,8 +16,10 @@ goog.provide('Blockly.Arduino.ds18b20');
 goog.require('Blockly.Arduino');
 
 Blockly.Arduino['ds18b20_search'] = function() {
-  var ds18b20_pin = this.getFieldValue('ds18b20_pin');
-  var ds18b20_addr = this.getFieldValue('ds18b20_address');
+  //var ds18b20_pin = this.getFieldValue('ds18b20_pin');
+  //var ds18b20_addr = this.getFieldValue('ds18b20_address');
+  var ds18b20_pin = "1";
+  var ds18b20_addr = "10"
   Blockly.Arduino.includes_['ds18b20_include'] = '#include <OneWire.h>';
   Blockly.Arduino.definitions_['ds18b20_def_' + ds18b20_pin] = 'OneWire ds18b20(' + ds18b20_pin + '); // connected on pin' + ds18b20_pin + ' (a 4.7k resistor needed)'
   Blockly.Arduino.definitions_['ds18b20_def_' + ds18b20_addr] = 'byte addr_ds18b20_' + ds18b20_addr + '[' + ds18b20_addr + '];';

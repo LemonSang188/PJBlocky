@@ -38,7 +38,7 @@ app.post('/verify-code', async (req, res) => {
     // เขียนไฟล์ลงในโฟลเดอร์ย่อย
     fs.writeFileSync(sketchFilePath, code);
 
-    const arduinoCliPath = `"tools/arduino-cli.exe"`;
+    const arduinoCliPath = `"./tools/arduino-cli.exe"`;
     const cmd = `${arduinoCliPath} compile --fqbn ${boardName} "${sketchFolder}"`;
 
     exec(cmd, (error, stdout, stderr) => {

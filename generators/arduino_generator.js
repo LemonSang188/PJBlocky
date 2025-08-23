@@ -203,9 +203,6 @@ Blockly.Arduino.finish = function (code) {
     #define MQ2_ANALOG A1
     #define MQ2_DIGITAL 2
     #define LM35_PIN A0
-    #define RGB_R 9
-    #define RGB_G 10
-    #define RGB_B 11
 
     // === Global Variables ===
     long duration;
@@ -223,7 +220,7 @@ Blockly.Arduino.finish = function (code) {
     // LM35 doesn't need pinMode because analogRead handles it
     `;
 
-    const rgbLoopCode = `
+    /*const rgbLoopCode = `
     // ปิดไฟทั้งหมด
     analogWrite(RGB_R, 0);
     analogWrite(RGB_G, 0);
@@ -253,7 +250,7 @@ Blockly.Arduino.finish = function (code) {
     analogWrite(RGB_G, 255);
     analogWrite(RGB_B, 255);
     delay(500);
-    `;
+    `;*/
 
     const ultrasonicLoopCode = `
     digitalWrite(TRIG_PIN, LOW);
@@ -298,7 +295,6 @@ Blockly.Arduino.finish = function (code) {
         ultrasonicLoopCode +
         mq2LoopCode +
         lm35LoopCode +
-        rgbLoopCode +
         '\n' +
         code.replace(/\n/g, '\n  ') +
         '\n  delay(500);';

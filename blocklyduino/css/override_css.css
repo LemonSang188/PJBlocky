@@ -1,0 +1,206 @@
+/**
+* @license
+* Copyright 2020 Sébastien CANET
+* SPDX-License-Identifier: BSD-3-Clause
+*/
+
+/* CSS specific added for the theme */
+
+body {
+    background-color: #afb1b1;
+}
+#separator {
+    background-color: #afb1b1;
+}
+#helpModal_header {
+    background-color: #afb1b1;
+}
+#keyboard_nav_header {
+    background-color: #afb1b1;
+}
+#buttonsMenuPopupInside,
+#buttonsToolsPopupInside,
+#buttonsIotPopupInside{
+    background-color: #afb1b1;
+    padding: 5px;
+}
+.config_content {
+    background-color: #afb1b1;
+}
+.modal-header, .modal-footer {
+    background-color: #afb1b1;
+}
+.accordion {
+  background-color: #afb1b1;
+}
+.accordion:hover {
+  color: #afb1b1;
+}
+.active {
+    color: #afb1b1;
+  background-color: #666666;
+}
+.collapsibleButton {
+    background-color: #afb1b1;
+}
+.active:after {
+    color: #afb1b1;
+}
+#lateral-panel-setup-label {
+    color: #afb1b1;
+}
+.closeModal:hover,
+.closeModal:focus {
+    color: #666666;
+}
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsibleButton:hover {
+    background-color: #666666;
+}
+
+/* enhance sliders behavior */
+input:checked + .slider {
+  background-color: #17a1a5;
+}
+input:focus + .slider {
+  box-shadow: 0 0 1px #17a1a5;
+}
+input:checked + .slider:before {
+  -webkit-transform: translateY(27px);
+  -ms-transform: translateY(27px);
+  transform: translateY(27px);
+}
+
+/**
+ * @fileoverview Toolbox modification, override css style
+ * @source https://blocklycodelabs.dev/codelabs/custom-toolbox
+ */
+/* Makes label white */
+.blocklyTreeLabel {
+  color: white;
+  font-weight: 400;
+  font-size: 18px;
+}
+/* Adds padding around the group of categories and separators */
+.blocklyToolboxContents {
+  padding: .2em;
+}
+/* Adds space between the categories, rounds the corners and adds space around the label */
+.blocklyTreeRow {
+  padding: 15px;
+  border-radius: 4px;
+  height: initial;
+}
+/* Changes color of the icon to white */
+.customIcon {
+  color: white;
+  margin-left: 5px;
+  vertical-align: middle;
+  width: 25px;
+}
+
+/* Block Logic */
+[aria-selected="false"] #LOGIC {
+  background-color: orange !important;
+}
+
+[aria-selected="true"] .blocklyTreeLabel[id="LOGIC.label"] {
+  color: orange !important;
+}
+
+[aria-selected="true"] .customIcon.fa.fa-project-diagram {
+  color: orange !important; 
+}
+
+path.blocklyPathDark[fill="#496684"] {
+  fill: orange !important;
+}
+
+path.blocklyPath[fill="#5b80a5"] {
+  fill: orange !important;
+}
+
+path.blocklyPathLight[stroke="#8ca6c0"] {
+  stroke: orange !important;
+}
+
+/* Block Text */
+[aria-selected="false"] #TEXT {
+  background-color: purple !important;
+}
+
+[aria-selected="true"] .blocklyTreeLabel[id="TEXT.label"] {
+  color: purple !important;
+}
+
+[aria-selected="true"] .customIcon.fa.fa-quote-left {
+  color: purple !important; 
+}
+
+path.blocklyPathDark[fill="#498470"] {
+  fill: purple !important;
+}
+
+path.blocklyPath[fill="#5ba58c"] {
+  fill: purple !important;
+}
+path.blocklyPath[fill="#bddbd1"] {
+  fill: rgb(211, 150, 211) !important;
+}
+
+path.blocklyPathLight[stroke="#8cc0af"] {
+  stroke: purple !important;
+}
+
+/* Block Function */
+[aria-selected="false"] #FUNCTIONS {
+  background-color: palevioletred !important;
+}
+
+[aria-selected="true"] .blocklyTreeLabel[id="FUNCTIONS.label"] {
+  color: palevioletred !important;
+}
+
+[aria-selected="true"] .customIcon.fab.fa-whmcs {
+  color: palevioletred !important; 
+}
+
+path.blocklyPathDark[fill="#7a4984"] {
+  fill: palevioletred !important;
+}
+
+path.blocklyPath[fill="#995ba5"] {
+  fill: palevioletred !important;
+}
+
+path.blocklyPathLight[stroke="#b88cc0"] {
+  stroke: palevioletred !important;
+}
+
+/* Block Math */
+[aria-selected="false"] #MATH {
+  background-color: #29b6f6 !important;
+}
+
+[aria-selected="true"] .blocklyTreeLabel[id="MATH.label"] {
+  color: #29b6f6 !important;
+}
+
+[aria-selected="true"] .customIcon.fa.fa-calculator {
+  color: #29b6f6 !important; 
+}
+
+path.blocklyPathDark[fill="#495284"] {
+  fill: #29b6f6 !important;
+}
+
+path.blocklyPath[fill="#5b67a5"] {
+  fill: #29b6f6 !important;
+}
+path.blocklyPath[fill="#bdc2db"] {
+  fill: #b3e5fc !important;
+}
+
+path.blocklyPathLight[stroke="#8c95c0"] {
+  stroke: #29b6f6 !important;
+}

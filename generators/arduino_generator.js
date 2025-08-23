@@ -204,6 +204,10 @@ Blockly.Arduino.finish = function (code) {
     #define MQ2_DIGITAL 2
     #define LM35_PIN A0
 
+    const int RGB_R = 9;
+    const int RGB_G = 10;
+    const int RGB_B = 11;
+    
     // === Global Variables ===
     long duration;
     float distance;

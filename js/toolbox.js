@@ -15,7 +15,7 @@ var jsonToolbox = {
 };
 jsonToolbox["contents"][0] = toolbox_standard["contents"][0];
 jsonToolbox["contents"][1] = toolbox_standard["contents"][1];
-jsonToolbox["contents"][2] = toolbox_arduino["contents"][0];
+jsonToolbox["contents"][2] = [];
 jsonToolbox["contents"][3] = toolbox_standard["contents"][3];
 jsonToolbox["contents"][4] = [];
 jsonToolbox["contents"][5] = [];

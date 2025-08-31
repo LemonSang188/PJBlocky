@@ -2,7 +2,7 @@ var toolbox_custom = {
    "kind": "categoryToolbox",
    "contents": [{
 	  "kind": "category",
-	  "name": "%{BKY_CAT_CUSTOM}",
+	  "name": "Arduino",
 		"toolboxitemid": "custom",
 		"levels": "1,2,3",
 		"level": "1",
@@ -11,9 +11,34 @@ var toolbox_custom = {
 		  "icon": "customIcon fas fa-thermometer-half"
 		},
 	  "contents": [{
-		 "kind": "block",
-		 "type": "testblock"
-		 }
+		"kind": "block",
+		"type": "LedRGB"
+		}, {
+		"kind": "block",
+		"type": "MhMqSensor"
+		}, {
+		"kind": "block",
+		"type": "HcSr04"
+		}, {
+		"kind": "block",
+		"type": "52abLm35Dz"
+		}, {
+		"kind": "block",
+		"type": "Mg996r"
+		}, {
+		"kind": "block",
+		"type": "DcMorter12v"
+		}, {
+		"kind": "block",
+		"type": "L9110"
+		}, {
+		"kind": "block",
+		"type": "color_picker"
+		},{
+		"kind": "block",
+		"type": "delay"
+		}
+		 
 	  ]
    }]
 };

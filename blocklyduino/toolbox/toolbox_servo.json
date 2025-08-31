@@ -2,7 +2,7 @@ var toolbox_servo = {
    "kind": "categoryToolbox",
    "contents": [{
 	  "kind": "category",
-	  "name": "%{BKY_CAT_SERVO}",
+	  "name": "servo",
 		"toolboxitemid": "SERVO",
 		"levels": "1,2,3",
 		"level": "1",

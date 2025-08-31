@@ -28,59 +28,40 @@ Blockly.Arduino['LedRGB'] = function(block) {
 
   var ledRGB  = block.getFieldValue('ledRGB');
   var ledState = block.getFieldValue('ledState');
-  var RGBresult = ledRGB + ',' +ledState;
   var code = ``;
 
-  switch (RGBresult) {
-   case 'R,I':
-      code = `
+  if (ledState == "O"){
+    code = `
+      //ปิดไฟ
+      analogWrite(RGB_R, 0);
+      analogWrite(RGB_G, 0);
+      analogWrite(RGB_B, 0);
+      `;
+  };
+  if (ledState == "I" && ledRGB == "R"){
+    code = `
       //แสดงไฟสีแดง
       analogWrite(RGB_R, 255);
       analogWrite(RGB_G, 0);
       analogWrite(RGB_B, 0);
       `;
-  break;
-    case 'R,O' :
-      code = `
-      //ปิดไฟ
-      analogWrite(RGB_R, 0);
-      analogWrite(RGB_G, 0);
-      analogWrite(RGB_B, 0);
-      `;
-  break;
-   case 'G,I':
-      code = `
+  };
+  if (ledState == "I" && ledRGB == "G"){
+    code = `
       //แสดงไฟสีเขียว
       analogWrite(RGB_R, 0);
       analogWrite(RGB_G, 255);
       analogWrite(RGB_B, 0);
       `;
-  break;
-  case 'G,O' :
-      code = `
-      //ปิดไฟ
-      analogWrite(RGB_R, 0);
-      analogWrite(RGB_G, 0);
-      analogWrite(RGB_B, 0);
-      `;
-  break;
-  case 'B,I' :
-      code = `
+  };
+  if (ledState == "I" && ledRGB == "B"){
+    code = `
       //แสดงไฟสีน้ำเงิน
       analogWrite(RGB_R, 0);
       analogWrite(RGB_G, 0);
       analogWrite(RGB_B, 255);
       `;
-  break;
-  case 'B,O' :
-      code = `
-      //ปิดไฟ
-      analogWrite(RGB_R, 0);
-      analogWrite(RGB_G, 0);
-      analogWrite(RGB_B, 0);
-      `;
-  break;
-}
+  };
 
   return code;
 };

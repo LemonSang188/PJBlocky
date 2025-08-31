@@ -5,7 +5,6 @@ goog.provide('Blockly.Arduino.custom');
 goog.require('Blockly.Arduino');
 
 
-<<<<<<< HEAD
 Blockly.Arduino['testblock'] = function() {
   Blockly.Arduino.setups_['RGBR'] = 'const int RGB_R = 9;';
   Blockly.Arduino.setups_['RGBG'] = 'const int RGB_G = 10;';
@@ -19,12 +18,6 @@ Blockly.Arduino['testblock'] = function() {
     analogWrite(RGB_G, 0);
     analogWrite(RGB_B, 0);
     delay(500);
-=======
-Blockly.Arduino['LedRGB'] = function(block) {
-  Blockly.Arduino.setups_['RGBR'] = 'const int RGB_R = 9';
-  Blockly.Arduino.setups_['RGBG'] = 'const int RGB_G = 10';
-  Blockly.Arduino.setups_['RGBB'] = 'const int RGB_B = 11';
->>>>>>> jirapath
 
   var ledRGB  = block.getFieldValue('ledRGB');
   var ledState = block.getFieldValue('ledState');

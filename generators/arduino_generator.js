@@ -197,7 +197,6 @@ Blockly.Arduino.finish = function (code) {
     Blockly.Arduino.variableDB_.reset();
 
       const sensorHeader = `
-<<<<<<< HEAD
     // === Pin Definitions ===
     #define TRIG_PIN 1
     #define ECHO_PIN 3
@@ -216,8 +215,6 @@ Blockly.Arduino.finish = function (code) {
     bool gasDetected = false;
     int tempValue = 0;
     float temperatureC = 0.0;
-=======
->>>>>>> jirapath
     `;
 
     const sensorSetup = `

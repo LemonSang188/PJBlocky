@@ -33,9 +33,6 @@ var toolbox_custom = {
 		"type": "L9110"
 		}, {
 		"kind": "block",
-		"type": "color_picker"
-		},{
-		"kind": "block",
 		"type": "delay"
 		}
 		 

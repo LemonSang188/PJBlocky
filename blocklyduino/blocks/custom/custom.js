@@ -102,28 +102,6 @@ Blockly.Blocks['L9110'] = {
 	}
 };
 
-Blockly.Blocks['color_picker'] = {
-	init: function() {
-    var dropdownOptions = [
-      ['A', 'A'],
-      ['B', 'B'],
-      ['C', 'C'],
-      ['D', 'D']
-    ];
-
-    this.myDropdown_ = new Blockly.FieldDropdown(dropdownOptions);
-
-    this.appendDummyInput()
-        .appendField("เลือกค่าเริ่มต้น")
-        .appendField(this.myDropdown_, 'MY_CHOICE');
-    
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-
-    this.myDropdown_.setValue('D');
-  }
-};
-
 Blockly.Blocks['delay'] = {
 	init: function() {
     this.appendDummyInput()

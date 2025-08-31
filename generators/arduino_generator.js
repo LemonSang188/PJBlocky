@@ -197,6 +197,24 @@ Blockly.Arduino.finish = function (code) {
     Blockly.Arduino.variableDB_.reset();
 
       const sensorHeader = `
+    // === Pin Definitions ===
+    #define TRIG_PIN 1
+    #define ECHO_PIN 3
+    #define MQ2_ANALOG A1
+    #define MQ2_DIGITAL 2
+    #define LM35_PIN A0
+
+    const int RGB_R = 9;
+    const int RGB_G = 10;
+    const int RGB_B = 11;
+    
+    // === Global Variables ===
+    long duration;
+    float distance;
+    int gasValue = 0;
+    bool gasDetected = false;
+    int tempValue = 0;
+    float temperatureC = 0.0;
     `;
 
     const sensorSetup = `

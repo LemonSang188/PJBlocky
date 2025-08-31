@@ -5,10 +5,19 @@ goog.provide('Blockly.Arduino.custom');
 goog.require('Blockly.Arduino');
 
 
-Blockly.Arduino['LedRGB'] = function(block) {
-  Blockly.Arduino.setups_['RGBR'] = 'const int RGB_R = 9';
-  Blockly.Arduino.setups_['RGBG'] = 'const int RGB_G = 10';
-  Blockly.Arduino.setups_['RGBB'] = 'const int RGB_B = 11';
+Blockly.Arduino['testblock'] = function() {
+  Blockly.Arduino.setups_['RGBR'] = 'const int RGB_R = 9;';
+  Blockly.Arduino.setups_['RGBG'] = 'const int RGB_G = 10;';
+  Blockly.Arduino.setups_['RGBB'] = 'const int RGB_B = 11;';
+  Blockly.Arduino.setups_['RGBt'] = 'pinMode(RGB_R, OUTPUT);';
+  Blockly.Arduino.setups_['RGBy'] = 'pinMode(RGB_G, OUTPUT);';
+  Blockly.Arduino.setups_['RGBu'] = 'pinMode(RGB_B, OUTPUT);';
+  const rgbLoopCode = `
+    // ปิดไฟทั้งหมด
+    analogWrite(RGB_R, 0);
+    analogWrite(RGB_G, 0);
+    analogWrite(RGB_B, 0);
+    delay(500);
 
   var ledRGB  = block.getFieldValue('ledRGB');
   var ledState = block.getFieldValue('ledState');

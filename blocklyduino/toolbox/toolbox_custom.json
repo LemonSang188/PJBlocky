@@ -18,10 +18,19 @@ var toolbox_custom = {
 		"type": "MhMqSensor"
 		}, {
 		"kind": "block",
+		"type": "MhMqSensorInput"
+		}, {
+		"kind": "block",
 		"type": "HcSr04"
 		}, {
 		"kind": "block",
+		"type": "HcSr04Input"
+		}, {
+		"kind": "block",
 		"type": "52abLm35Dz"
+		}, {
+		"kind": "block",
+		"type": "52abLm35DzInput"
 		}, {
 		"kind": "block",
 		"type": "Mg996r"

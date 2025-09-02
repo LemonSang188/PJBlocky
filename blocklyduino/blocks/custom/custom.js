@@ -42,6 +42,16 @@ Blockly.Blocks['MhMqSensor'] = {
 	}
 };
 
+Blockly.Blocks['MhMqSensorInput'] = {
+	init: function() {
+		this.appendDummyInput()
+			.setAlign(Blockly.ALIGN_LEFT)
+			.appendField("SensorInput Form PIN A1");
+		this.setOutput(true, 'Number'); 
+		this.setTooltip('อ่านค่าระยะทางจาก Ultrasonic Sensor');
+	}
+};
+
 Blockly.Blocks['HcSr04'] = {
 	init: function() {
 		this.appendDummyInput()
@@ -49,6 +59,15 @@ Blockly.Blocks['HcSr04'] = {
 			.appendField("HcSr04")
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+	}
+}
+
+Blockly.Blocks['HcSr04Input'] = {
+	init: function() {
+		this.appendDummyInput()
+			.setAlign(Blockly.ALIGN_LEFT)
+			.appendField("HcSr04 Input Form PIN 1")
+		this.setOutput(true, 'Number');
 	}
 }
 
@@ -61,6 +80,16 @@ Blockly.Blocks['52abLm35Dz'] = {
         this.setNextStatement(true, null);
 	}
 }
+
+Blockly.Blocks['52abLm35DzInput'] = {
+	init: function() {
+		this.appendDummyInput()
+			.setAlign(Blockly.ALIGN_LEFT)
+			.appendField("52abLm35Dz")
+		this.setOutput(true, 'Number');
+	}
+}
+
 
 Blockly.Blocks['Mg996r'] = {
 	init: function() {

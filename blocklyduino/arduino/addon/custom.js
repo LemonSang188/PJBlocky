@@ -76,18 +76,17 @@ Blockly.Arduino['MhMqSensor'] = function() {
 };
 
 Blockly.Arduino['MhMqSensorInput'] = function() {
-  Blockly.Arduino.definitions_['MQdefie1'] = '#define MQ2_ANALOG A1;';
-  Blockly.Arduino.definitions_['MQdefie2'] = '#define MQ2_DIGITAL 2;';
-  Blockly.Arduino.setups_['MQPin'] = 'pinMode(MQ2_DIGITAL, INPUT);';
+  Blockly.Arduino.definitions_['MQdefie1'] = '#define MQ2_ANALOG A1';
+  Blockly.Arduino.setups_['MQPin'] = 'pinMode(MQ2_ANALOG, INPUT);';
   var code = `analogRead(MQ2_ANALOG)`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino['HcSr04'] = function() {
   Blockly.Arduino.definitions_['HCdefie1'] = '#define ECHO_PIN 1';
-  Blockly.Arduino.definitions_['HCdefie2'] = '#define TRIG_PIN 3'
+  Blockly.Arduino.definitions_['HCdefie2'] = '#define TRIG_PIN 3';
   Blockly.Arduino.definitions_['HCdefie3'] = 'long duration;'
-  Blockly.Arduino.definitions_['HCdefie3'] = 'float distance;'
+  Blockly.Arduino.definitions_['HCdefie4'] = 'float distance;'
   Blockly.Arduino.setups_['HCPin1'] = 'pinMode(ECHO_PIN, INPUT);';
   Blockly.Arduino.setups_['HCPin2'] = 'pinMode(TRIG_PIN, OUTPUT);';
   var code = `
@@ -109,25 +108,24 @@ Blockly.Arduino['HcSr04'] = function() {
 
 Blockly.Arduino['HcSr04Input'] = function() {
   Blockly.Arduino.definitions_['HCdefie1'] = '#define ECHO_PIN 1';
-  Blockly.Arduino.definitions_['HCdefie2'] = '#define TRIG_PIN 3'
+  Blockly.Arduino.definitions_['HCdefie2'] = '#define TRIG_PIN 3';
   Blockly.Arduino.setups_['HCPin1'] = 'pinMode(ECHO_PIN, INPUT);';
   Blockly.Arduino.setups_['HCPin2'] = 'pinMode(TRIG_PIN, OUTPUT);';
+  
   Blockly.Arduino.definitions_['ultrasonic_func'] = `
-  long ultrasonicRead(int TRIG_PIN, int ECHO_PIN) {
-  pinMode(TRIG_PIN, OUTPUT);
+long ultrasonicRead() {
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
   digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
-  pinMode(ECHO_PIN, INPUT);
   return pulseIn(ECHO_PIN, HIGH) * 0.034 / 2;
-  }`;
+}`;
 
-  var code = 'ultrasonicRead(TRIG_PIN,ECHO_PIN )';
-
+  var code = 'ultrasonicRead()';
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
+
 
 Blockly.Arduino['52abLm35Dz'] = function() {
   Blockly.Arduino.definitions_['52abdefie1'] = '#define LM35_PIN A0';
@@ -149,19 +147,21 @@ Blockly.Arduino['52abLm35Dz'] = function() {
 Blockly.Arduino['52abLm35DzInput'] = function() {
   Blockly.Arduino.definitions_['52abdefie1'] = '#define LM35_PIN A0';
   Blockly.Arduino.setups_['52abdefiePin'] = "// LM35 doesn't need pinMode because analogRead handles it";
-  var code = `analogRead(ECHO_PIN) * 0.48828125`;
-  return code;
+  var code = `analogRead(LM35_PIN) * 0.48828125`;
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino['Mg996r'] = function(block) {
-  Blockly.Arduino.definitions_['MGdefie'] = '#define Servo_PIN 6';
-  Blockly.Arduino.setups_['MGPin'] = 'Myservo.attach(Servo_PIN);';
   Blockly.Arduino.includes_['includes_servo'] = '#include <Servo.h>';
+  Blockly.Arduino.definitions_['MGservoObj'] = 'Servo myservo;';
+  Blockly.Arduino.definitions_['MGdefie'] = '#define Servo_PIN 6';
+  Blockly.Arduino.setups_['MGPin'] = 'myservo.attach(Servo_PIN);';
 
-  var valuedegree = block.getFieldValue('MgDegree')
-  var code = 'Myservo.write' +'('+ valuedegree + ');'
+  var valuedegree = parseInt(block.getFieldValue('MgDegree'));
+  var code = 'myservo.write(' + valuedegree + ');\n';
   return code;
 };
+
 
 Blockly.Arduino['delay'] = function(block) {
   var DelayValue = block.getFieldValue('DelayValue');

@@ -23,42 +23,46 @@ app.post('/verify-code', async (req, res) => {
 
   // สร้างโฟลเดอร์ชั่วคราว
   tmp.dir({ unsafeCleanup: true }, (err, tempDirPath, cleanupCallback) => {
-    if (err) {
-      console.error('Failed to create temp dir:', err);
-      return res.status(500).send('Failed to create temporary folder');
+  if (err) {
+    console.error('Failed to create temp dir:', err);
+    return res.status(500).send('Failed to create temporary folder');
+  }
+
+  const sketchName = 'SketchBlockly';
+  const sketchFolder = `${tempDirPath}/${sketchName}`;
+  const sketchFilePath = `${sketchFolder}/${sketchName}.ino`;
+
+  // สร้าง folder แบบ recursive
+  fs.mkdirSync(sketchFolder, { recursive: true });
+
+  // เขียนไฟล์ .ino ลง folder
+  fs.writeFileSync(sketchFilePath, code);
+
+  console.log('✅ Temporary sketch created at:', sketchFilePath);
+
+  const arduinoCliPath = "D:/Blockmicc1/tools/arduino-cli.exe";
+  const cmd = `"${arduinoCliPath}" compile --fqbn ${boardName} "${sketchFolder}"`;
+
+  // ใช้ exec
+  exec(cmd, (error, stdout, stderr) => {
+    cleanupCallback();
+
+    const output = stdout || stderr;
+
+    if (error) {
+      console.error('❌ Compile error:\n', output || error.message);
+      return res.status(400).json({
+        success: false,
+        error: output || error.message
+      });
     }
 
-    const sketchName = 'SketchBlockly';
-    const sketchFolder = `${tempDirPath}/${sketchName}`;
-    const sketchFilePath = `${sketchFolder}/${sketchName}.ino`;
+    console.log('✅ Compile success');
+    if (output && output.trim()) console.log(output);
 
-    // สร้างโฟลเดอร์ย่อย
-    fs.mkdirSync(sketchFolder);
-
-    // เขียนไฟล์ลงในโฟลเดอร์ย่อย
-    fs.writeFileSync(sketchFilePath, code);
-
-    const arduinoCliPath = `"D:/Blockmicc1/tools/arduino-cli.exe"`;
-    const cmd = `${arduinoCliPath} compile --fqbn ${boardName} "${sketchFolder}"`;
-
-    exec(cmd, (error, stdout, stderr) => {
-      cleanupCallback();
-
-      if (error) {
-        console.error('❌ Compile error:\n', stderr || stdout);
-        return res.status(400).json({
-          success: false,
-          error: stderr || stdout || error.message
-        });
-      }
-
-
-      
-      console.log('✅ Compile success:\n', stdout);
-      res.status(200).json({
-        success: true,
-        message: stdout
-      });
+    res.status(200).json({
+      success: true,
+      message: output && output.trim() ? output : "✅ Compile success"
     });
   });
 });
@@ -100,7 +104,7 @@ app.post('/upload-code', async (req, res) => {
       return res.status(500).send('Failed to write sketch file');
     }
 
-    const arduinoCliPath = path.resolve(__dirname, '../tools/arduino-cli.exe');
+    const arduinoCliPath = path.resolve(__dirname, 'D:/Blockmicc1/tools/arduino-cli.exe');
     const compileCmd = `"${arduinoCliPath}" compile --fqbn ${boardName} "${sketchFolder}"`;
     const uploadCmd = `"${arduinoCliPath}" upload -p "${targetPort.path}" --fqbn ${boardName} "${sketchFolder}"`;
 

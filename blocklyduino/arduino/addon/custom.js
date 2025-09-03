@@ -75,8 +75,7 @@ Blockly.Arduino['MhMqSensor'] = function() {
 };
 
 Blockly.Arduino['MhMqSensorInput'] = function() {
-  Blockly.Arduino.definitions_['MQdefie1'] = '#define MQ2_ANALOG A1;';
-  Blockly.Arduino.definitions_['MQdefie2'] = '#define MQ2_DIGITAL 2;';
+  Blockly.Arduino.definitions_['MQdefie1'] = '#define MQ2_ANALOG A1';
   Blockly.Arduino.setups_['MQPin'] = 'pinMode(MQ2_DIGITAL, INPUT);';
   var code = `analogRead(MQ2_ANALOG)`;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
@@ -149,7 +148,7 @@ Blockly.Arduino['52abLm35DzInput'] = function() {
   Blockly.Arduino.definitions_['52abdefie1'] = '#define LM35_PIN A0';
   Blockly.Arduino.setups_['52abdefiePin'] = "// LM35 doesn't need pinMode because analogRead handles it";
   var code = `analogRead(ECHO_PIN) * 0.48828125`;
-  return code;
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino['Mg996r'] = function(block) {

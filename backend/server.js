@@ -11,6 +11,11 @@ const { ReadlineParser } = require('@serialport/parser-readline');
 const app = express();
 const port = 8080;
 
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8081 }); // Port สำหรับ WebSocket
+let serialPort = null;
+let parser = null;
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -38,7 +43,7 @@ app.post('/verify-code', async (req, res) => {
     // เขียนไฟล์ลงในโฟลเดอร์ย่อย
     fs.writeFileSync(sketchFilePath, code);
 
-    const arduinoCliPath = `"D:/Blockmicc1/tools/arduino-cli.exe"`;
+    const arduinoCliPath = `"D:/pjaon/tools/arduino-cli.exe"`;
     const cmd = `${arduinoCliPath} compile --fqbn ${boardName} "${sketchFolder}"`;
 
     exec(cmd, (error, stdout, stderr) => {
@@ -161,4 +166,19 @@ app.get('/list-ports', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
+});
+
+// เมื่อมี Client เชื่อมต่อเข้ามา
+wss.on('connection', ws => {
+  console.log('Client connected');
+  
+  if (serialPort && serialPort.isOpen) {
+    parser.on('data', data => {
+      ws.send(data); // ส่งข้อมูลที่รับจาก Arduino ไปให้ Client ทันที
+    });
+  }
+
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
 });

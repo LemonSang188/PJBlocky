@@ -9,9 +9,10 @@ Blockly.Arduino['LedRGB'] = function(block) {
   Blockly.Arduino.definitions_['defieRGBR'] = 'const int RGB_R = 9;';
   Blockly.Arduino.definitions_['defieRGBG'] = 'const int RGB_G = 10;';
   Blockly.Arduino.definitions_['defieRGBB'] = 'const int RGB_B = 11;';
-  Blockly.Arduino.setups_['RGBR'] = 'pinMode(RGB_R, OUTPUT);';
-  Blockly.Arduino.setups_['RGBG'] = 'pinMode(RGB_G, OUTPUT);';
-  Blockly.Arduino.setups_['RGBB'] = 'pinMode(RGB_B, OUTPUT);';
+  Blockly.Arduino.setups_['RGBR'] = 'pinMode (RGB_R, OUTPUT);';
+  Blockly.Arduino.setups_['RGBG'] = 'pinMode (RGB_G, OUTPUT);';
+  Blockly.Arduino.setups_['RGBB'] = 'pinMode (RGB_B, OUTPUT);';
+  
 
   var ledRGB  = block.getFieldValue('ledRGB');
   var ledState = block.getFieldValue('ledState');

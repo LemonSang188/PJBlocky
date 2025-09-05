@@ -11,6 +11,36 @@ const { ReadlineParser } = require('@serialport/parser-readline');
 const app = express();
 const port = 8080;
 
+const WebSocket = require('ws');
+// สร้าง WebSocket Server
+const wss = new WebSocket.Server({ port: 8081 }); // ใช้ port ที่ไม่ซ้ำกับ express server
+// ตัวแปรสำหรับ serial port
+let serialPort = null;
+let parser = null;
+
+wss.on('connection', ws => {
+    console.log('Client connected via WebSocket');
+    //ws.send('Client connected via WebSocket');
+
+    /*let count = 0;
+    const interval = setInterval(() => {
+        ws.send(`Mock Data: ${count++}`);
+    }, 1000); // ส่งข้อมูลทุก 1 วินาที
+
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        //ws.send('Client disconnected');
+        clearInterval(interval); // หยุดการส่งข้อมูลเมื่อไคลเอนต์ตัดการเชื่อมต่อ
+    });*/
+
+    // เพิ่มฟังก์ชันสำหรับรับข้อมูลจาก serial port
+    if (serialPort && serialPort.isOpen) {
+        parser.on('data', data => {
+            ws.send(data); // ส่งข้อมูลที่รับจาก Arduino ไปยัง client
+        });
+    }
+});
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -38,7 +68,7 @@ app.post('/verify-code', async (req, res) => {
     // เขียนไฟล์ลงในโฟลเดอร์ย่อย
     fs.writeFileSync(sketchFilePath, code);
 
-    const arduinoCliPath = `"D:/Blockmicc1/tools/arduino-cli.exe"`;
+    const arduinoCliPath = `"D:/pjaon/tools/arduino-cli.exe"`;
     const cmd = `${arduinoCliPath} compile --fqbn ${boardName} "${sketchFolder}"`;
 
     exec(cmd, (error, stdout, stderr) => {

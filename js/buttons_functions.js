@@ -295,7 +295,7 @@ Code.verifyCodeFile = async function () {
                 allowOutsideClick: false,
                 allowEscapeKey: false,
             });
-            element.innerHTML = `<pre style="color:green;">${data.message}</pre>`;
+            element.innerHTML = `<pre style="color:green;">✅ Compile success\n${data.message}</pre>`;
         } else {
             Swal.fire({
                 icon: 'error',
@@ -306,7 +306,7 @@ Code.verifyCodeFile = async function () {
                 allowOutsideClick: false,
                 allowEscapeKey: false,
             });
-            element.innerHTML = `<pre style="color:red;">${data.error}</pre>`;
+            element.innerHTML = `<pre style="color:red;">❌ Compile error:\n${data.error}</pre>`;
         }
     } catch (err) {
         console.error('เกิดข้อผิดพลาดในการเรียก API:', err);

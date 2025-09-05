@@ -161,6 +161,17 @@
                                 </div>
                             </div>
                             <div id="content_serial"></div>
+                            <div id="content_serial"></div>
+<script>
+  const logEl = document.getElementById('content_serial');
+
+  // เปิด SSE
+  const evtSource = new EventSource("http://localhost:8080/monitor");
+
+  evtSource.onmessage = (event) => {
+    logEl.innerHTML += event.data + "<br>";
+  };
+</script>
                         </div>
                     </td>
                 </tr>

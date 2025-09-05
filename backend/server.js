@@ -4,16 +4,41 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
 const tmp = require('tmp');
-const { exec } = require('child_process');
-
+const { spawn } = require('child_process');
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
+
 const app = express();
 const port = 8080;
 
 app.use(cors());
 app.use(bodyParser.json());
 
+let activeSerial = null;   // พอร์ตที่กำลังเปิด
+let parser = null;
+let clients = [];          // เก็บ client /monitor SSE
+
+/**
+ * Monitor Serial แบบ SSE (broadcast ให้ทุก client)
+ */
+app.get('/monitor', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
+
+  console.log("👀 Client connected to /monitor");
+  clients.push(res);
+
+  req.on('close', () => {
+    console.log("❌ Client disconnected from /monitor");
+    clients = clients.filter(r => r !== res);
+  });
+});
+
+/**
+ * Verify Code (compile only)
+ */
 app.post('/verify-code', async (req, res) => {
   const { code, boardName } = req.body;
 
@@ -21,52 +46,64 @@ app.post('/verify-code', async (req, res) => {
     return res.status(400).send('Missing code or boardName');
   }
 
-  // สร้างโฟลเดอร์ชั่วคราว
   tmp.dir({ unsafeCleanup: true }, (err, tempDirPath, cleanupCallback) => {
-  if (err) {
-    console.error('Failed to create temp dir:', err);
-    return res.status(500).send('Failed to create temporary folder');
-  }
-
-  const sketchName = 'SketchBlockly';
-  const sketchFolder = `${tempDirPath}/${sketchName}`;
-  const sketchFilePath = `${sketchFolder}/${sketchName}.ino`;
-
-  // สร้าง folder แบบ recursive
-  fs.mkdirSync(sketchFolder, { recursive: true });
-
-  // เขียนไฟล์ .ino ลง folder
-  fs.writeFileSync(sketchFilePath, code);
-
-  console.log('✅ Temporary sketch created at:', sketchFilePath);
-
-  const arduinoCliPath = "D:/Blockmicc1/tools/arduino-cli.exe";
-  const cmd = `"${arduinoCliPath}" compile --fqbn ${boardName} "${sketchFolder}"`;
-
-  // ใช้ exec
-  exec(cmd, (error, stdout, stderr) => {
-    cleanupCallback();
-
-    const output = stdout || stderr;
-
-    if (error) {
-      console.error('❌ Compile error:\n', output || error.message);
-      return res.status(400).json({
-        success: false,
-        error: output || error.message
-      });
+    if (err) {
+      console.error('Failed to create temp dir:', err);
+      return res.status(500).send('Failed to create temporary folder');
     }
 
-    console.log('✅ Compile success');
-    if (output && output.trim()) console.log(output);
+    const sketchName = 'SketchBlockly';
+    const sketchFolder = `${tempDirPath}/${sketchName}`;
+    const sketchFilePath = `${sketchFolder}/${sketchName}.ino`;
 
-    res.status(200).json({
-      success: true,
-      message: output && output.trim() ? output : "✅ Compile success"
+    fs.mkdirSync(sketchFolder, { recursive: true });
+    fs.writeFileSync(sketchFilePath, code);
+
+    console.log('✅ Temporary sketch created at:', sketchFilePath);
+
+    const arduinoCliPath = "D:/Blockmicc1/tools/arduino-cli.exe";
+
+    const compileProcess = spawn(arduinoCliPath, [
+      "compile", "--fqbn", boardName, sketchFolder
+    ], { shell: true });
+
+    let compileOutput = "";
+
+    compileProcess.stdout.on('data', data => {
+      const text = data.toString();
+      compileOutput += text;
+      console.log(`[stdout] ${text}`);
+    });
+
+    compileProcess.stderr.on('data', data => {
+      const text = data.toString();
+      compileOutput += text;
+      console.error(`[stderr] ${text}`);
+    });
+
+    compileProcess.on('close', code => {
+      cleanupCallback();
+
+      if (code === 0) {
+        console.log("✅ Compile success");
+        return res.status(200).json({
+          success: true,
+          message: `✅ Compile success\n${compileOutput}`
+        });
+      } else {
+        console.error("❌ Compile failed");
+        return res.status(400).json({
+          success: false,
+          message: `❌ Compile failed\n${compileOutput}`
+        });
+      }
     });
   });
 });
 
+/**
+ * Upload Code (compile + upload + open serial for /monitor)
+ */
 app.post('/upload-code', async (req, res) => {
   const { code, productId, vendorId, boardName } = req.body;
 
@@ -82,6 +119,7 @@ app.post('/upload-code', async (req, res) => {
   });
 
   if (!targetPort) {
+    console.error("❌ Target serial port not found. Ports available:", ports);
     return res.status(404).send('Target serial port not found');
   }
 
@@ -104,65 +142,115 @@ app.post('/upload-code', async (req, res) => {
       return res.status(500).send('Failed to write sketch file');
     }
 
-    const arduinoCliPath = path.resolve(__dirname, 'D:/Blockmicc1/tools/arduino-cli.exe');
-    const compileCmd = `"${arduinoCliPath}" compile --fqbn ${boardName} "${sketchFolder}"`;
-    const uploadCmd = `"${arduinoCliPath}" upload -p "${targetPort.path}" --fqbn ${boardName} "${sketchFolder}"`;
+    const arduinoCliPath = "D:/Blockmicc1/tools/arduino-cli.exe";
 
-    console.log(`Compiling for board: ${boardName} at port ${targetPort.path}`);
-    console.log(`arduinoCliPath : ${arduinoCliPath}`);
-    console.log(`compileCmd : ${compileCmd}`);
+    let compileOutput = "";
+    console.log(`⚡ Compiling for board: ${boardName} at port ${targetPort.path}`);
 
-    exec(compileCmd, (error, stdout, stderr) => {
-      if (error) {
-        console.error('❌ Compile error:\n', stderr || stdout);
+    // ---------- Compile ----------
+    const compileProcess = spawn(arduinoCliPath, [
+      "compile", "--fqbn", boardName, sketchFolder
+    ], { shell: true });
+
+    compileProcess.stdout.on("data", data => {
+      const text = data.toString();
+      compileOutput += text;
+      console.log(`[stdout][compile] ${text}`);
+    });
+
+    compileProcess.stderr.on("data", data => {
+      const text = data.toString();
+      compileOutput += text;
+      console.error(`[stderr][compile] ${text}`);
+    });
+
+    compileProcess.on("close", code => {
+      if (code !== 0) {
         cleanupCallback();
         return res.status(400).json({
           success: false,
-          error: stderr || stdout || error.message
+          message: `❌ Compile failed\n${compileOutput}`
         });
       }
 
-      console.log('✅ Compile success, now uploading...');
+      console.log("✅ Compile success, now uploading...");
+      let uploadOutput = "";
 
-      exec(uploadCmd, (error, stdout, stderr) => {
+      // ---------- Upload ----------
+      const uploadProcess = spawn(arduinoCliPath, [
+        "upload", "-p", targetPort.path, "--fqbn", boardName, sketchFolder
+      ], { shell: true });
+
+      uploadProcess.stdout.on("data", data => {
+        const text = data.toString();
+        uploadOutput += text;
+        console.log(`[stdout][upload] ${text}`);
+      });
+
+      uploadProcess.stderr.on("data", data => {
+        const text = data.toString();
+        uploadOutput += text;
+        console.error(`[stderr][upload] ${text}`);
+      });
+
+      uploadProcess.on("close", code => {
         cleanupCallback();
+        if (code === 0) {
+          console.log("✅ Upload success");
 
-        if (error) {
-          console.error('❌ Upload error:\n', stderr || stdout);
+          // ---------- Serial Setup ----------
+          if (activeSerial) {
+            parser.removeAllListeners("data"); // clear old listeners
+          } else {
+            activeSerial = new SerialPort({
+              path: targetPort.path,
+              baudRate: 9600
+            });
+          }
+
+          parser = activeSerial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+
+          // ส่ง log ไปยังทุก client ที่ subscribe /monitor
+          parser.on("data", line => {
+            console.log(`📟 Serial: ${line}`);
+            clients.forEach(clientRes => clientRes.write(`data: ${line}\n\n`));
+          });
+
+          return res.status(200).json({
+            success: true,
+            message: `✅ Upload success\n${uploadOutput}`
+          });
+        } else {
+          console.error("❌ Upload failed");
           return res.status(400).json({
             success: false,
-            error: stderr || stdout || error.message
+            message: `❌ Upload failed\n${uploadOutput}`
           });
         }
-
-        console.log('✅ Upload success:\n', stdout);
-        res.status(200).json({
-          success: true,
-          message: stdout
-        });
       });
     });
   });
 });
 
+/**
+ * List Ports
+ */
 app.get('/list-ports', async (req, res) => {
   try {
-      const ports = await SerialPort.list();
+    const ports = await SerialPort.list();
+    const portsFormatted = ports.map(port => ({
+      ...port,
+      vendorIdDecimal: port.vendorId ? parseInt(port.vendorId, 16) : null,
+      productIdDecimal: port.productId ? parseInt(port.productId, 16) : null,
+    }));
 
-      // แปลงค่า vendorId และ productId เป็นฐาน 10
-      const portsFormatted = ports.map(port => ({
-          ...port,
-          vendorIdDecimal: port.vendorId ? parseInt(port.vendorId, 16) : null,
-          productIdDecimal: port.productId ? parseInt(port.productId, 16) : null,
-      }));
-
-      res.status(200).json(portsFormatted);
+    res.status(200).json(portsFormatted);
   } catch (error) {
-      console.error('Error listing serial ports:', error);
-      res.status(500).send('Failed to list serial ports');
+    console.error('Error listing serial ports:', error);
+    res.status(500).send('Failed to list serial ports');
   }
 });
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`🚀 Server running at http://localhost:${port}`);
 });

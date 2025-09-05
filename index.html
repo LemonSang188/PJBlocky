@@ -161,27 +161,7 @@
                                 </div>
                             </div>
                             <div id="content_serial"></div>
-                            <script>
-                                const outputDiv = document.getElementById('content_serial');
-                                
-                                // สร้างการเชื่อมต่อ WebSocket
-                                const ws = new WebSocket('ws://localhost:8081'); // ใช้ port ของ WebSocket
-
-                                ws.onmessage = function(event) {
-                                    // เพิ่มข้อมูลที่ได้รับจาก Arduino เข้าไปใน div
-                                    outputDiv.innerHTML += event.data + '<br>';
-                                    // เลื่อน scrollbar ลงล่างสุดโดยอัตโนมัติ
-                                    outputDiv.scrollTop = outputDiv.scrollHeight;
-                                };
-
-                                ws.onopen = function() {
-                                    console.log('WebSocket connected');
-                                };
-
-                                ws.onclose = function() {
-                                    console.log('WebSocket disconnected');
-                                };
-                            </script>
+                            <script src="./backend/serialmonitor.js"></script>
                         </div>
                     </td>
                 </tr>

@@ -12,9 +12,34 @@ const app = express();
 const port = 8080;
 
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8081 }); // Port สำหรับ WebSocket
+// สร้าง WebSocket Server
+const wss = new WebSocket.Server({ port: 8081 }); // ใช้ port ที่ไม่ซ้ำกับ express server
+// ตัวแปรสำหรับ serial port
 let serialPort = null;
 let parser = null;
+
+wss.on('connection', ws => {
+    console.log('Client connected via WebSocket');
+    //ws.send('Client connected via WebSocket');
+
+    /*let count = 0;
+    const interval = setInterval(() => {
+        ws.send(`Mock Data: ${count++}`);
+    }, 1000); // ส่งข้อมูลทุก 1 วินาที
+
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        //ws.send('Client disconnected');
+        clearInterval(interval); // หยุดการส่งข้อมูลเมื่อไคลเอนต์ตัดการเชื่อมต่อ
+    });*/
+
+    // เพิ่มฟังก์ชันสำหรับรับข้อมูลจาก serial port
+    if (serialPort && serialPort.isOpen) {
+        parser.on('data', data => {
+            ws.send(data); // ส่งข้อมูลที่รับจาก Arduino ไปยัง client
+        });
+    }
+});
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -166,19 +191,4 @@ app.get('/list-ports', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
-});
-
-// เมื่อมี Client เชื่อมต่อเข้ามา
-wss.on('connection', ws => {
-  console.log('Client connected');
-  
-  if (serialPort && serialPort.isOpen) {
-    parser.on('data', data => {
-      ws.send(data); // ส่งข้อมูลที่รับจาก Arduino ไปให้ Client ทันที
-    });
-  }
-
-  ws.on('close', () => {
-    console.log('Client disconnected');
-  });
 });

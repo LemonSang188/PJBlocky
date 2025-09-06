@@ -161,16 +161,23 @@
                                 </div>
                             </div>
                             <div id="content_serial"></div>
-                            <div id="content_serial"></div>
+                            
 <script>
-  const logEl = document.getElementById('content_serial');
+const logEl = document.getElementById('content_serial');
 
-  // เปิด SSE
-  const evtSource = new EventSource("http://localhost:8080/monitor");
+// ฟังก์ชันเพิ่ม log
+function addLog(message) {
+    logEl.innerHTML += message + '<br>';
 
-  evtSource.onmessage = (event) => {
-    logEl.innerHTML += event.data + "<br>";
-  };
+    // เลื่อนอัตโนมัติไป log ล่าสุด
+    logEl.scrollTop = logEl.scrollHeight;
+}
+
+// ตัวอย่างการรับ log แบบ SSE
+const evtSource = new EventSource("http://localhost:8080/monitor");
+evtSource.onmessage = (event) => {
+    addLog(event.data);
+};
 </script>
                         </div>
                     </td>

@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 let activeSerial = null;   // พอร์ตที่กำลังเปิด
 let parser = null;
 let clients = [];          // เก็บ client /monitor SSE
+let lastLine = null;       // เก็บค่า Serial ล่าสุด
 
 /**
  * Monitor Serial แบบ SSE (broadcast ให้ทุก client)
@@ -35,6 +36,14 @@ app.get('/monitor', (req, res) => {
     clients = clients.filter(r => r !== res);
   });
 });
+
+// ส่งค่าล่าสุดไปทุก client ทุก 1 วิ
+setInterval(() => {
+  if (lastLine !== null) {
+    clients.forEach(clientRes => clientRes.write(`data: ${lastLine}\n\n`));
+    lastLine = null; // เคลียร์เพื่อรอค่าถัดไป
+  }
+}, 0);
 
 /**
  * Verify Code (compile only)
@@ -210,10 +219,14 @@ app.post('/upload-code', async (req, res) => {
 
           parser = activeSerial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
-          // ส่ง log ไปยังทุก client ที่ subscribe /monitor
+          // เก็บค่าล่าสุดจาก Serial (กรอง 0.00 °C)
           parser.on("data", line => {
+            if (line.includes("Temperature: 0.00")) {
+              console.log("🚫 Ignore invalid value:", line);
+              return; // ไม่เก็บค่า 0.00
+            }
+            lastLine = line;
             console.log(`📟 Serial: ${line}`);
-            clients.forEach(clientRes => clientRes.write(`data: ${line}\n\n`));
           });
 
           return res.status(200).json({

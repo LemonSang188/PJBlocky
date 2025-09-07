@@ -19,6 +19,13 @@ let parser = null;
 let clients = [];          // เก็บ client /monitor SSE
 let lastLine = null;       // เก็บค่า Serial ล่าสุด
 
+function broadcast(message) {
+  clients.forEach(clientRes => {
+    clientRes.write(`data: ${message}\n\n`);
+    if (clientRes.flush) clientRes.flush(); // บังคับส่งข้อมูลทันที
+  });
+}
+
 /**
  * Monitor Serial แบบ SSE (broadcast ให้ทุก client)
  */
@@ -94,16 +101,16 @@ app.post('/verify-code', async (req, res) => {
       cleanupCallback();
 
       if (code === 0) {
-        console.log("✅ Compile success");
+        console.log("✅ Compile succe");
         return res.status(200).json({
           success: true,
-          message: `✅ Compile success\n${compileOutput}`
+          message: `✅ Verify-Code "OK"\n${compileOutput}`
         });
       } else {
         console.error("❌ Compile failed");
         return res.status(400).json({
           success: false,
-          message: `❌ Compile failed\n${compileOutput}`
+          message: `❌ verify-code failed\n${compileOutput}`
         });
       }
     });
@@ -182,8 +189,11 @@ app.post('/upload-code', async (req, res) => {
         });
       }
 
-      console.log("✅ Compile success, now uploading...");
-      let uploadOutput = "";
+  console.log("✅ Compile success, now uploading...");
+  broadcast("✅ Compile success, now uploading..."); 
+
+  let uploadOutput = ""; 
+  
 
       // ---------- Upload ----------
       const uploadProcess = spawn(arduinoCliPath, [
@@ -206,6 +216,7 @@ app.post('/upload-code', async (req, res) => {
         cleanupCallback();
         if (code === 0) {
           console.log("✅ Upload success");
+          broadcast("✅ Upload success"); 
 
           // ---------- Serial Setup ----------
           if (activeSerial) {

@@ -160,23 +160,21 @@
                                     </button>
                                 </div>
                             </div>
-                            <div id="content_serial"></div>
-                            
+                           <div id="content_serial" style="height: 300px; overflow-y: auto; background: black; color: lime; padding: 5px; white-space: pre-wrap;"></div>
+
 <script>
 const logEl = document.getElementById('content_serial');
 
-// ฟังก์ชันเพิ่ม log
-function addLog(message) {
-    logEl.innerHTML += message + '<br>';
-
-    // เลื่อนอัตโนมัติไป log ล่าสุด
-    logEl.scrollTop = logEl.scrollHeight;
-}
-
-// ตัวอย่างการรับ log แบบ SSE
 const evtSource = new EventSource("http://localhost:8080/monitor");
+
 evtSource.onmessage = (event) => {
-    addLog(event.data);
+  // ลบบรรทัดเก่าแล้วเขียนใหม่ ถ้าเป็น progress bar
+  if(event.data.startsWith('[')) {
+    logEl.innerHTML = event.data; 
+  } else {
+    logEl.innerHTML += event.data + '<br>';
+  }
+  logEl.scrollTop = logEl.scrollHeight;
 };
 </script>
                         </div>

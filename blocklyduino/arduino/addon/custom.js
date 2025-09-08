@@ -188,16 +188,16 @@ Blockly.Arduino['L9110'] = function(block) {
       code = `
   digitalWrite(L9110A1A,HIGH);
   digitalWrite(L9110A1B,LOW);
-  digitalWrite(L9110B1A,HIGH);
-  digitalWrite(L9110B1B,LOW);
+  digitalWrite(L9110B1A,LOW);
+  digitalWrite(L9110B1B,HIGH);
   `;
   break;
     case 'B' :
       code = `
   digitalWrite(L9110A1A,LOW);
   digitalWrite(L9110A1B,HIGH);
-  digitalWrite(L9110B1A,LOW);
-  digitalWrite(L9110B1B,HIGH);
+  digitalWrite(L9110B1A,HIGH);
+  digitalWrite(L9110B1B,LOW);
   `;
   break;
   case 'C' :

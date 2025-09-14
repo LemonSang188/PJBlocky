@@ -15,31 +15,28 @@ var toolbox_custom = {
 		"type": "LedRGB"
 		}, {
 		"kind": "block",
-		"type": "MhMqSensor"
+		"type": "MethaneGasSensor"
 		}, {
 		"kind": "block",
-		"type": "MhMqSensorInput"
+		"type": "MethaneGasSensorInput"
 		}, {
 		"kind": "block",
-		"type": "HcSr04"
+		"type": "DistanceSensor"
 		}, {
 		"kind": "block",
-		"type": "HcSr04Input"
+		"type": "DistanceSensorInput"
 		}, {
 		"kind": "block",
-		"type": "52abLm35Dz"
+		"type": "TemperatureSensor"
 		}, {
 		"kind": "block",
-		"type": "52abLm35DzInput"
+		"type": "TemperatureSensorInput"
 		}, {
 		"kind": "block",
-		"type": "Mg996r"
+		"type": "Servo"
 		}, {
 		"kind": "block",
-		"type": "DcMorter12v"
-		}, {
-		"kind": "block",
-		"type": "L9110"
+		"type": "Motordrive"
 		}, {
 		"kind": "block",
 		"type": "delay"

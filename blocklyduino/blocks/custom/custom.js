@@ -117,7 +117,8 @@ Blockly.Blocks['L9110'] = {
       ['หน้า', 'A'],
       ['หลัง', 'B'],
       ['ซ้าย', 'C'],
-      ['ขวา', 'D']
+      ['ขวา', 'D'],
+	  ['หยุด', 'E']
     ];
 
 	this.myDropdown_ = new Blockly.FieldDropdown(dropdownOptions);

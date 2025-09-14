@@ -160,21 +160,45 @@
                                     </button>
                                 </div>
                             </div>
-                           <div id="content_serial" style="height: 300px; overflow-y: auto; background: black; color: lime; padding: 5px; white-space: pre-wrap;"></div>
+                           <div  id="content_serial">
+
 
 <script>
 const logEl = document.getElementById('content_serial');
-
 const evtSource = new EventSource("http://localhost:8080/monitor");
 
+let autoScroll = true;
+
+// ตรวจจับว่า user เลื่อนขึ้นไปอ่าน log เก่าไหม
+logEl.addEventListener("scroll", () => {
+  const nearBottom = logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight < 20;
+  autoScroll = nearBottom;
+});
+
 evtSource.onmessage = (event) => {
-  // ลบบรรทัดเก่าแล้วเขียนใหม่ ถ้าเป็น progress bar
-  if(event.data.startsWith('[')) {
-    logEl.innerHTML = event.data; 
+  const text = event.data;
+
+  // ✅ ถ้าเป็น progress bar (เช่น [####----])
+  if (text.startsWith('[')) {
+    if (logEl.lastChild && logEl.lastChild.classList.contains('progress-line')) {
+      logEl.lastChild.textContent = text;  // อัปเดตแทน
+    } else {
+      const line = document.createElement("div");
+      line.className = "progress-line";
+      line.textContent = text;
+      logEl.appendChild(line);
+    }
   } else {
-    logEl.innerHTML += event.data + '<br>';
+    // ✅ ถ้าเป็น log ปกติ → เพิ่มบรรทัดใหม่
+    const line = document.createElement("div");
+    line.textContent = text;
+    logEl.appendChild(line);
   }
-  logEl.scrollTop = logEl.scrollHeight;
+
+  // ✅ เลื่อนอัตโนมัติ ถ้าอยู่ล่างสุด
+  if (autoScroll) {
+    logEl.scrollTop = logEl.scrollHeight;
+  }
 };
 </script>
                         </div>

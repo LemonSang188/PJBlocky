@@ -72,7 +72,7 @@ Blockly.Arduino['MhMqSensor'] = function() {
   } else {
       Serial.println(" - ✅ Normal");
   }`;
-  return code;
+  return code; 
 };
 
 Blockly.Arduino['MhMqSensorInput'] = function() {
@@ -202,15 +202,23 @@ Blockly.Arduino['L9110'] = function(block) {
   break;
   case 'C' :
       code = `
+  digitalWrite(L9110A1A,HIGH);
+  digitalWrite(L9110A1B,LOW);
+  digitalWrite(L9110B1A,LOW);
+  digitalWrite(L9110B1B,LOW);
+  `;
+  break;
+  case 'D' :
+      code = `
   digitalWrite(L9110A1A,LOW);
   digitalWrite(L9110A1B,LOW);
   digitalWrite(L9110B1A,HIGH);
   digitalWrite(L9110B1B,LOW);
   `;
   break;
-  case 'D' :
+  case 'E' :
       code = `
-  digitalWrite(L9110A1A,HIGH);
+  digitalWrite(L9110A1A,LOW);
   digitalWrite(L9110A1B,LOW);
   digitalWrite(L9110B1A,LOW);
   digitalWrite(L9110B1B,LOW);

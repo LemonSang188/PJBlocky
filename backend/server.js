@@ -45,12 +45,6 @@ app.get('/monitor', (req, res) => {
 });
 
 // ส่งค่าล่าสุดไปทุก client ทุก 1 วิ
-setInterval(() => {
-  if (lastLine !== null) {
-    clients.forEach(clientRes => clientRes.write(`data: ${lastLine}\n\n`));
-    lastLine = null; // เคลียร์เพื่อรอค่าถัดไป
-  }
-}, 0);
 
 /**
  * Verify Code (compile only)
@@ -236,7 +230,7 @@ app.post('/upload-code', async (req, res) => {
               console.log("🚫 Ignore invalid value:", line);
               return; // ไม่เก็บค่า 0.00
             }
-            lastLine = line;
+             broadcast(line);   // <<< ส่งไปทุก client เลย 
             console.log(`📟 Serial: ${line}`);
           });
 

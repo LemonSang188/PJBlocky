@@ -6,9 +6,11 @@ var toolbox_custom = {
 		"toolboxitemid": "custom",
 		"levels": "1,2,3",
 		"level": "1",
-	  "categorystyle": "ds18b20_category",
-		"cssConfig": {
-		  "icon": "customIcon fas fa-thermometer-half"
+	  "categorystyle": "arduino_category",
+      "cssConfig": {
+          "icon": "customIcon fas fa-microchip",
+          "colour": "#00979D",   // สีเขียวอมฟ้า Arduino
+          "textColour": "#ffffff" // ตัวอักษรสีขาว
 		},
 	  "contents": [{
 		"kind": "block",

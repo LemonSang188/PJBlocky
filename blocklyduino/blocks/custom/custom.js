@@ -18,7 +18,22 @@ Blockly.Blocks['LedRGB'] = {
       ['ปิด', 'O']
     ];
 
-		this.myDropdown_A = new Blockly.FieldDropdown(dropdownOptionsA);
+		this.myDropdown_A = new Blockly.FieldDropdown(dropdownOptionsA, function(newValue) {
+			var block = this.getSourceBlock();
+			switch(newValue) {
+				case 'R':
+					block.setColour("#ff0000"); // แดง
+					break;
+				case 'G':
+					block.setColour("#00ff00"); // เขียว
+					break;
+				case 'B':
+					block.setColour("#0000ff"); // น้ำเงิน
+					break;
+			}
+			return newValue;
+		});
+
 		this.myDropdown_B = new Blockly.FieldDropdown(dropdownOptionsB);
 
 		this.appendDummyInput()
@@ -27,8 +42,12 @@ Blockly.Blocks['LedRGB'] = {
 			.appendField(this.myDropdown_A, 'ledRGB')
 			.appendField("are")
 			.appendField(this.myDropdown_B, 'ledState')
+
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+
+		this.setColour("#ff0000"); // 0–360 hue, สี Arduino  230
+		
 	}
 };
 
@@ -39,6 +58,8 @@ Blockly.Blocks['MethaneGasSensor'] = {
 			.appendField("MethaneGasSensor");
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+
+		this.setColour("#00979D");
 	}
 };
 
@@ -49,6 +70,9 @@ Blockly.Blocks['MethaneGasSensorInput'] = {
 			.appendField("MethaneGasSensorInput Form PIN A1");
 		this.setOutput(true, 'Number'); 
 		this.setTooltip('อ่านค่าระยะทางจาก Ultrasonic Sensor');
+
+		this.setColour("#00979D");
+
 	}
 };
 
@@ -59,6 +83,8 @@ Blockly.Blocks['DistanceSensor'] = {
 			.appendField("DistanceSensor")
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+
+		this.setColour("#00979D");
 	}
 }
 
@@ -68,6 +94,8 @@ Blockly.Blocks['DistanceSensorInput'] = {
 			.setAlign(Blockly.ALIGN_LEFT)
 			.appendField("DistanceSensorInput Input Form PIN 1")
 		this.setOutput(true, 'Number');
+
+		this.setColour("#00979D");
 	}
 }
 
@@ -78,6 +106,8 @@ Blockly.Blocks['TemperatureSensor'] = {
 			.appendField("TemperatureSensor")
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+
+		this.setColour("#00979D");
 	}
 }
 
@@ -87,6 +117,8 @@ Blockly.Blocks['TemperatureSensorInput'] = {
 			.setAlign(Blockly.ALIGN_LEFT)
 			.appendField("TemperatureSensorInput")
 		this.setOutput(true, 'Number');
+
+		this.setColour("#00979D");
 	}
 }
 
@@ -98,6 +130,8 @@ Blockly.Blocks['Servo'] = {
 			.appendField(new Blockly.FieldTextInput('90'), 'MgDegree');
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+
+		this.setColour("#00979D");
 	}
 }
 
@@ -119,6 +153,8 @@ Blockly.Blocks['Motordrive'] = {
 			.appendField(this.myDropdown_, 'L9Value');
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
+
+		this.setColour("#00979D");
 	}
 };
 
@@ -126,9 +162,11 @@ Blockly.Blocks['delay'] = {
 	init: function() {
     this.appendDummyInput()
         .appendField("Delay ")
-        .appendField(new Blockly.FieldTextInput('500'), 'DelayValue');
+        .appendField(new Blockly.FieldTextInput('1000'), 'DelayValue');
     
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
+
+	this.setColour("#00979D");
   }
 };

@@ -32,66 +32,66 @@ Blockly.Blocks['LedRGB'] = {
 	}
 };
 
-Blockly.Blocks['MhMqSensor'] = {
+Blockly.Blocks['MethaneGasSensor'] = {
 	init: function() {
 		this.appendDummyInput()
 			.setAlign(Blockly.ALIGN_LEFT)
-			.appendField("Sensor");
+			.appendField("MethaneGasSensor");
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 	}
 };
 
-Blockly.Blocks['MhMqSensorInput'] = {
+Blockly.Blocks['MethaneGasSensorInput'] = {
 	init: function() {
 		this.appendDummyInput()
 			.setAlign(Blockly.ALIGN_LEFT)
-			.appendField("SensorInput Form PIN A1");
+			.appendField("MethaneGasSensorInput Form PIN A1");
 		this.setOutput(true, 'Number'); 
 		this.setTooltip('อ่านค่าระยะทางจาก Ultrasonic Sensor');
 	}
 };
 
-Blockly.Blocks['HcSr04'] = {
+Blockly.Blocks['DistanceSensor'] = {
 	init: function() {
 		this.appendDummyInput()
 			.setAlign(Blockly.ALIGN_LEFT)
-			.appendField("HcSr04")
+			.appendField("DistanceSensor")
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 	}
 }
 
-Blockly.Blocks['HcSr04Input'] = {
+Blockly.Blocks['DistanceSensorInput'] = {
 	init: function() {
 		this.appendDummyInput()
 			.setAlign(Blockly.ALIGN_LEFT)
-			.appendField("HcSr04 Input Form PIN 1")
+			.appendField("DistanceSensorInput Input Form PIN 1")
 		this.setOutput(true, 'Number');
 	}
 }
 
-Blockly.Blocks['52abLm35Dz'] = {
+Blockly.Blocks['TemperatureSensor'] = {
 	init: function() {
 		this.appendDummyInput()
 			.setAlign(Blockly.ALIGN_LEFT)
-			.appendField("52abLm35Dz")
+			.appendField("TemperatureSensor")
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
 	}
 }
 
-Blockly.Blocks['52abLm35DzInput'] = {
+Blockly.Blocks['TemperatureSensorInput'] = {
 	init: function() {
 		this.appendDummyInput()
 			.setAlign(Blockly.ALIGN_LEFT)
-			.appendField("52abLm35Dz")
+			.appendField("TemperatureSensorInput")
 		this.setOutput(true, 'Number');
 	}
 }
 
 
-Blockly.Blocks['Mg996r'] = {
+Blockly.Blocks['Servo'] = {
 	init: function() {
 		this.appendDummyInput()
 			.appendField('Servo degree is(0-180)')
@@ -101,17 +101,7 @@ Blockly.Blocks['Mg996r'] = {
 	}
 }
 
-Blockly.Blocks['DcMorter12v'] = {
-	init: function() {
-		this.appendDummyInput()
-			.setAlign(Blockly.ALIGN_LEFT)
-			.appendField("DcMorter12v")
-		this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-	}
-};
-
-Blockly.Blocks['L9110'] = {
+Blockly.Blocks['Motordrive'] = {
 	init: function() {
 		var dropdownOptions = [
       ['หน้า', 'A'],
@@ -125,7 +115,7 @@ Blockly.Blocks['L9110'] = {
 
 		this.appendDummyInput()
 			.setAlign(Blockly.ALIGN_LEFT)
-			.appendField("L9110")
+			.appendField("Motordrive")
 			.appendField(this.myDropdown_, 'L9Value');
 		this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);

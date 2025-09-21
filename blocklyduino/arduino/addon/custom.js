@@ -184,7 +184,15 @@ Blockly.Arduino['Motordrive'] = function(block) {
   var code = '';
 
   switch (L9Value) {
-    case 'A' :
+     case 'A' :
+      code = `
+  digitalWrite(L9110A1A,LOW);
+  digitalWrite(L9110A1B,LOW);
+  digitalWrite(L9110B1A,LOW);
+  digitalWrite(L9110B1B,LOW);
+  `;
+  break;
+    case 'B' :
       code = `
   digitalWrite(L9110A1A,HIGH);
   digitalWrite(L9110A1B,LOW);
@@ -192,19 +200,11 @@ Blockly.Arduino['Motordrive'] = function(block) {
   digitalWrite(L9110B1B,HIGH);
   `;
   break;
-    case 'B' :
+    case 'C' :
       code = `
   digitalWrite(L9110A1A,LOW);
   digitalWrite(L9110A1B,HIGH);
   digitalWrite(L9110B1A,HIGH);
-  digitalWrite(L9110B1B,LOW);
-  `;
-  break;
-  case 'C' :
-      code = `
-  digitalWrite(L9110A1A,HIGH);
-  digitalWrite(L9110A1B,LOW);
-  digitalWrite(L9110B1A,LOW);
   digitalWrite(L9110B1B,LOW);
   `;
   break;
@@ -218,20 +218,13 @@ Blockly.Arduino['Motordrive'] = function(block) {
   break;
   case 'E' :
       code = `
-  digitalWrite(L9110A1A,LOW);
+  digitalWrite(L9110A1A,HIGH);
   digitalWrite(L9110A1B,LOW);
   digitalWrite(L9110B1A,LOW);
   digitalWrite(L9110B1B,LOW);
   `;
   break;
-  case 'E' :
-      code = `
-  digitalWrite(L9110A1A,LOW);
-  digitalWrite(L9110A1B,LOW);
-  digitalWrite(L9110B1A,LOW);
-  digitalWrite(L9110B1B,LOW);
-  `;
-  break;
+
   default:
       // หากไม่มี case ใดตรงกัน ให้สร้างโค้ดเริ่มต้นนี้
       code = '// No selected\n';

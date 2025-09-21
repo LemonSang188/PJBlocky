@@ -138,11 +138,12 @@ Blockly.Blocks['Servo'] = {
 Blockly.Blocks['Motordrive'] = {
 	init: function() {
 		var dropdownOptions = [
-      ['หน้า', 'A'],
-      ['หลัง', 'B'],
-      ['ซ้าย', 'C'],
-      ['ขวา', 'D'],
-	  ['หยุด', 'E']
+	  ['หยุด', 'A'],
+      ['หน้า', 'B'],
+      ['หลัง', 'C'],
+      ['ซ้าย', 'D'],
+      ['ขวา', 'E']
+	  
     ];
 
 	this.myDropdown_ = new Blockly.FieldDropdown(dropdownOptions);

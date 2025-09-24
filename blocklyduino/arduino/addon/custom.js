@@ -156,6 +156,7 @@ Blockly.Arduino['Servo'] = function(block) {
   Blockly.Arduino.definitions_['MGservoObj'] = 'Servo myservo;';
   Blockly.Arduino.definitions_['MGdefie'] = '#define Servo_PIN 6';
   Blockly.Arduino.setups_['MGPin'] = 'myservo.attach(Servo_PIN);';
+  Blockly.Arduino.setups_['MGdefault'] = 'myservo.write(90);';
 
   var valuedegree = parseInt(block.getFieldValue('MgDegree'));
   var code = 'myservo.write(' + valuedegree + ');\n';

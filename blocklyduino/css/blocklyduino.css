@@ -109,3 +109,34 @@
     border-radius: 5px;
     z-index: 5;
 }
+
+
+.buttonBar {
+    display: flex;            /* จัดให้ปุ่มอยู่เรียงแถวเดียว */
+    flex-direction: row;
+    align-items: center;      /* กึ่งกลางแนวตั้ง */
+    gap: 8px;                 /* ระยะห่างระหว่างปุ่ม */
+}
+
+.connectTextButton {
+    font-size: 11px;
+    font-weight: bold;
+    padding: 5px 9px;
+    border: 3px solid #333;
+    border-radius: 8px;
+
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    display: inline-flex;          /* ทำให้ข้อความอยู่กลางแนวตั้ง */
+    align-items: center;           /* กึ่งกลางแนวตั้ง */
+    justify-content: center;       /* กึ่งกลางแนวนอน */
+    line-height: normal;           /* override line-height:0 ของ iconButtons */
+    min-width: 55px;               /* ความกว้างพอดีข้อความ */
+}
+
+.connectTextButton:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.05);
+}

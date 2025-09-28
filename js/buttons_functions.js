@@ -255,16 +255,16 @@ Code.verifyCodeFile = async function () {
     if (!code || code.trim() === '') {
         Swal.fire({
             icon: 'warning',
-            title: 'ไม่มีโค้ดให้ตรวจสอบ',
-            text: 'โปรดสร้างโค้ดด้วยบล็อกก่อนกด Verify',
-            confirmButtonText: 'ตกลง'
+            title: 'No code to verify',
+            text: 'Please build your code using blocks before verifying',
+            confirmButtonText: 'OK'
         });
         return;
     }
 
     Swal.fire({
-        title: 'กำลังตรวจสอบโค้ด...',
-        text: 'กรุณารอสักครู่',
+        title: 'Checking the code...',
+        text: 'Please wait a moment',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
@@ -289,9 +289,9 @@ Code.verifyCodeFile = async function () {
         if (data.success) {
             Swal.fire({
                 icon: 'success',
-                title: 'ตรวจสอบสำเร็จ',
-                text: 'โค้ดสามารถคอมไพล์ได้ถูกต้อง',
-                confirmButtonText: 'ตกลง',
+                title: 'Verification Successful',
+                text: 'The code compiled correctly',
+                confirmButtonText: 'OK',
                 allowOutsideClick: false,
                 allowEscapeKey: false,
             });
@@ -299,26 +299,26 @@ Code.verifyCodeFile = async function () {
         } else {
             Swal.fire({
                 icon: 'error',
-                title: 'Syntax Code ไม่ถูกต้อง',
+                title: 'Invalid Syntax Code',
                 html: `<pre style="text-align: left;">${formatted}</pre>`,
                 width: 700,
-                confirmButtonText: 'ตกลง',
+                confirmButtonText: 'OK',
                 allowOutsideClick: false,
                 allowEscapeKey: false,
             });
             element.innerHTML = `<pre style="color:red;">${data.error}</pre>`;
         }
     } catch (err) {
-        console.error('เกิดข้อผิดพลาดในการเรียก API:', err);
+        console.error('An error occurred while calling the API:', err);
         Swal.fire({
             icon: 'error',
-            title: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
-            text: 'โปรดตรวจสอบว่า backend ทำงานอยู่หรือไม่',
-            confirmButtonText: 'ตกลง',
+            title: 'Unable to connect to the server',
+            text: 'Please check if the backend is running',
+            confirmButtonText: 'OK',
             allowOutsideClick: false,
             allowEscapeKey: false,
         });
-        element.innerHTML = `<pre style="color:red;">ไม่สามารถติดต่อ backend ได้</pre>`;
+        element.innerHTML = `<pre style="color:red;">Cannot connect to the backend. Please try again later.</pre>`;
     }
 };
 
@@ -345,7 +345,7 @@ Code.uploadCodeFile = async function () {
     });
 
     if (!arduinoPort) {
-        alert("กรุณาเชื่อมต่อกับ Arduino ก่อน");
+        alert("Please connect the Arduino");
         return;
     }
 

@@ -20,7 +20,7 @@ Blockly.Arduino['LedRGB'] = function(block) {
 
   if (ledState == "O"){
     code = `
-      //ปิดไฟ
+      //OFF
       analogWrite(RGB_R, 0);
       analogWrite(RGB_G, 0);
       analogWrite(RGB_B, 0);
@@ -28,7 +28,7 @@ Blockly.Arduino['LedRGB'] = function(block) {
   };
   if (ledState == "I" && ledRGB == "R"){
     code = `
-      //แสดงไฟสีแดง
+      //RED
       analogWrite(RGB_R, 255);
       analogWrite(RGB_G, 0);
       analogWrite(RGB_B, 0);
@@ -36,7 +36,7 @@ Blockly.Arduino['LedRGB'] = function(block) {
   };
   if (ledState == "I" && ledRGB == "G"){
     code = `
-      //แสดงไฟสีเขียว
+      //GRREN
       analogWrite(RGB_R, 0);
       analogWrite(RGB_G, 255);
       analogWrite(RGB_B, 0);
@@ -44,7 +44,7 @@ Blockly.Arduino['LedRGB'] = function(block) {
   };
   if (ledState == "I" && ledRGB == "B"){
     code = `
-      //แสดงไฟสีน้ำเงิน
+      //BLUE
       analogWrite(RGB_R, 0);
       analogWrite(RGB_G, 0);
       analogWrite(RGB_B, 255);

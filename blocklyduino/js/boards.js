@@ -109,7 +109,7 @@ Code.initializeSerial = async function () {
 
         if (ports.length === 0 && !arduinoPort) {
             serialButton.disabled = true;
-            connectedPortSpan.textContent = `กรุณาเชื่อมต่อบอร์ด Arduino และกดลงทะเบียนบอร์ดกับระบบ`;
+            connectedPortSpan.textContent = `Please connect the Arduino board and register it with the system.`;
             statusDot.classList.remove('connected');
             statusDot.classList.remove('waiting');
             statusDot.classList.add('disconnected');
@@ -129,7 +129,7 @@ Code.initializeSerial = async function () {
             statusDot.classList.add('waiting');
         } else {
             serialButton.disabled = true;
-            serialButtonSpan.title = "กรุณาเชื่อมต่อ Arduino ก่อน";
+            serialButtonSpan.title = "Please connect the Arduino board";
             connectedPortSpan.textContent = `ไม่ได้เชื่อมต่อบอร์ด`;
             statusDot.classList.remove('connected');
             statusDot.classList.remove('waiting');

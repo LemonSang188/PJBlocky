@@ -9,13 +9,13 @@ goog.require('Blockly');
 Blockly.Blocks['LedRGB'] = {
 	init: function() {
 		var dropdownOptionsA = [
-      ['แดง', 'R'],
-      ['เขียว', 'G'],
-      ['ฟ้า', 'B']
+      ['RED', 'R'],
+      ['GREEN', 'G'],
+      ['BLUE', 'B']
     ];
 		var dropdownOptionsB = [
-      ['เปิด', 'I'],
-      ['ปิด', 'O']
+      ['ON', 'I'],
+      ['OFF', 'O']
     ];
 
 		this.myDropdown_A = new Blockly.FieldDropdown(dropdownOptionsA, function(newValue) {
@@ -138,11 +138,11 @@ Blockly.Blocks['Servo'] = {
 Blockly.Blocks['Motordrive'] = {
 	init: function() {
 		var dropdownOptions = [
-	  ['หยุด', 'A'],
-      ['หน้า', 'B'],
-      ['หลัง', 'C'],
-      ['ซ้าย', 'D'],
-      ['ขวา', 'E']
+	  ['STOP', 'A'],
+      ['FRONT', 'B'],
+      ['BACK', 'C'],
+      ['LEFT', 'D'],
+      ['RIGHT', 'E']
 	  
     ];
 

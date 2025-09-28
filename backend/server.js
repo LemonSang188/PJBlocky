@@ -184,7 +184,7 @@ app.post('/upload-code', async (req, res) => {
       }
 
   console.log("✅ Compile success, now uploading...");
-  broadcast("✅ Compile success, now uploading..."); 
+  broadcast("\x1b[33m✅ Compile success, now uploading...\x1b[0m"); 
 
   let uploadOutput = ""; 
   

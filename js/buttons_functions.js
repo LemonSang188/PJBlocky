@@ -264,7 +264,7 @@ Code.verifyCodeFile = async function () {
 
     Swal.fire({
         title: 'Checking the code...',
-        text: 'Please wait a moment',
+        text: 'Please wait a moment..',
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();

@@ -222,6 +222,8 @@ app.post('/upload-code', async (req, res) => {
             });
           }
 
+          const tmpLogPath = path.join(__dirname, "serial_temp.log");
+
           parser = activeSerial.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
           // เก็บค่าล่าสุดจาก Serial (กรอง 0.00 °C)
@@ -230,7 +232,12 @@ app.post('/upload-code', async (req, res) => {
               console.log("🚫 Ignore invalid value:", line);
               return; // ไม่เก็บค่า 0.00
             }
-             broadcast(line);   // <<< ส่งไปทุก client เลย 
+
+            // ✅ บันทึกลงไฟล์ log
+            fs.appendFileSync(tmpLogPath, `[${new Date().toISOString()}] ${line}\n`);
+
+            // ส่งไปยัง client
+            broadcast(line);
             console.log(`📟 Serial: ${line}`);
           });
 
@@ -271,4 +278,22 @@ app.get('/list-ports', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
+});
+
+app.get("/download-log", (req, res) => {
+  const tmpLogPath = path.join(__dirname, "serial_temp.log");
+
+  if (!fs.existsSync(tmpLogPath)) {
+    return res.status(404).send("No log available");
+  }
+
+  res.download(tmpLogPath, "serial.log", err => {
+    if (err) {
+      console.error("❌ Error sending log file:", err);
+    } else {
+      console.log("✅ Log file sent to client");
+      // จะลบไฟล์หลังส่งเสร็จหรือไม่ลบก็ได้
+      // fs.unlinkSync(tmpLogPath);
+    }
+  });
 });

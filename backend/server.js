@@ -182,9 +182,9 @@ app.post('/upload-code', async (req, res) => {
           message: `❌ Compile failed\n${compileOutput}`
         });
       }
-
-  console.log("✅ Compile success, now uploading...");
-  broadcast("\x1b[33m✅ Compile success, now uploading...\x1b[0m"); 
+    
+  console.log("🟡 Compile success, now uploading...");
+  broadcast("🟡 Compile success, now uploading...");
 
   let uploadOutput = ""; 
   
@@ -233,8 +233,11 @@ app.post('/upload-code', async (req, res) => {
               return; // ไม่เก็บค่า 0.00
             }
 
-            // ✅ บันทึกลงไฟล์ log
-            fs.appendFileSync(tmpLogPath, `[${new Date().toISOString()}] ${line}\n`);
+            fetch('/save-log', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ log: visibleLog })
+          });
 
             // ส่งไปยัง client
             broadcast(line);

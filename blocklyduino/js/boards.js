@@ -95,7 +95,7 @@ Code.initializeSerial = async function () {
         0x1002: "Arduino UNO R4 WiFi"
     };
 
-    authorizeButtonSpan.title = "คลิกเพื่อค้นหา Port การเชื่อมต่อ";
+    authorizeButtonSpan.title = "Click to search for connection port";
 
     // ฟังก์ชันตรวจสอบและอัปเดตสถานะปุ่ม
     async function updateSerialButton() {
@@ -122,8 +122,8 @@ Code.initializeSerial = async function () {
         if (arduinoPort) {
             boardName = arduinoDevices[arduinoPort.getInfo().usbProductId];
             serialButton.disabled = false;
-            serialButtonSpan.title = `คลิกเพื่อเชื่อมต่อ ${boardName}`;
-			connectedPortSpan.textContent = `มีบอร์ด ${boardName} กำลังรอการเชื่อมต่อ`;
+            serialButtonSpan.title = `Click to connect ${boardName}`;
+			connectedPortSpan.textContent = ` ${boardName} board is waiting for connection`;
 			statusDot.classList.remove('connected');
             statusDot.classList.remove('disconnected');
             statusDot.classList.add('waiting');
@@ -139,7 +139,7 @@ Code.initializeSerial = async function () {
         // ตั้งค่าเหตุการณ์เมื่อคลิกปุ่ม
         serialButton.onclick = async function () {
             if (!arduinoPort) {
-				connectedPortSpan.textContent = `ไม่ได้เชื่อมต่อบอร์ด`;
+				connectedPortSpan.textContent = `Board not connected`;
                 statusDot.classList.remove('connected');
                 statusDot.classList.add('disconnected');
                 return;
@@ -148,12 +148,12 @@ Code.initializeSerial = async function () {
                 await arduinoPort.open({ baudRate: 9600 });
                 Swal.fire({
 					icon: 'success',
-					title: `เชื่อมต่อกับ ${arduinoDevices[arduinoPort.getInfo().usbProductId]} สำเร็จ`,
-					text: 'การเชื่อมต่อกับ Arduino สำเร็จแล้ว!',
-					confirmButtonText: 'ตกลง',
+					title: `Connect to ${arduinoDevices[arduinoPort.getInfo().usbProductId]} Success`,
+					text: 'Successfully connected to Arduino. ',
+					confirmButtonText: 'OK',
                     allowOutsideClick: false
 				})
-				connectedPortSpan.textContent = `เชื่อมต่อบอร์ด ${boardName} แล้ว`;
+				connectedPortSpan.textContent = `Board  ${boardName} connected.`;
 				statusDot.classList.remove('disconnected');
                 statusDot.classList.remove('waiting');
                 statusDot.classList.add('connected');

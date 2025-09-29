@@ -225,8 +225,19 @@ Code.saveCodeFile = function () {
 };
 
 Code.downloadSerialFile = function () {
-  // ใช้การเปลี่ยน location เพื่อดาวน์โหลดไฟล์จาก server
-  window.location.href = "http://localhost:8080/download-log";
+  const logEl = document.getElementById('content_serial');
+
+  // เอาเฉพาะข้อความที่แสดงบนเว็บจริง ๆ
+  const visibleLog = Array.from(logEl.children)
+    .map(line => line.textContent)
+    .join('\n');
+
+  const blob = new Blob([visibleLog], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "serial-log.txt"; // ชื่อไฟล์
+  a.click();
+  URL.revokeObjectURL(a.href);
 };
 
 /**

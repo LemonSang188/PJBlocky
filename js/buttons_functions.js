@@ -224,7 +224,10 @@ Code.saveCodeFile = function () {
     });
 };
 
-
+Code.downloadSerialFile = function () {
+  // ใช้การเปลี่ยน location เพื่อดาวน์โหลดไฟล์จาก server
+  window.location.href = "http://localhost:8080/download-log";
+};
 
 /**
   * Creats an INO file containing the Arduino code from the Blockly workspace

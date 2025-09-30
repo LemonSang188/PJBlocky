@@ -290,7 +290,7 @@ app.get("/download-log", (req, res) => {
     return res.status(404).send("No log available");
   }
 
-  res.download(tmpLogPath, "serial.log", err => {
+  res.download(tmpLogPath, "serial_temp.log", err => {
     if (err) {
       console.error("❌ Error sending log file:", err);
     } else {
@@ -299,4 +299,37 @@ app.get("/download-log", (req, res) => {
       // fs.unlinkSync(tmpLogPath);
     }
   });
+});
+
+// Cleanup log file
+app.get("/cleanup-log", (req, res) => {
+  const tmpLogPath = path.join(__dirname, "serial_temp.log");
+
+  try {
+    fs.writeFileSync(tmpLogPath, ""); // เขียนทับไฟล์ให้ว่าง
+    console.log("🧹 Log cleaned up");
+    res.json({ success: true, message: "🧹 Log cleaned up" });
+  } catch (err) {
+    console.error("❌ Failed to cleanup log:", err);
+    res.status(500).json({ success: false, message: "❌ Failed to cleanup log" });
+  }
+});
+
+// Mockup Serial: สร้าง log แค่ 1 บรรทัด
+app.get("/mock-serial-once", (req, res) => {
+  const tmpLogPath = path.join(__dirname, "serial_temp.log");
+
+  // สร้างข้อความจำลอง
+  const fakeData = `MockSerial Data: ${Math.random().toFixed(4)}`;
+  const logLine = `[${new Date().toISOString()}] ${fakeData}\n`;
+
+  // เขียนลงไฟล์ log
+  fs.appendFileSync(tmpLogPath, logLine);
+
+  // broadcast ไป client ที่เปิด /monitor
+  broadcast(fakeData);
+  console.log("📟 Mock Serial:", fakeData);
+
+  // ส่ง response กลับไป client
+  res.json({ success: true, message: "✅ Mock Serial created", data: fakeData });
 });

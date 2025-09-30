@@ -224,7 +224,7 @@ Code.saveCodeFile = function () {
     });
 };
 
-Code.downloadSerialFile = function () {
+/*Code.downloadSerialFile = function () {
   const logEl = document.getElementById('content_serial');
 
   // เอาเฉพาะข้อความที่แสดงบนเว็บจริง ๆ
@@ -238,6 +238,22 @@ Code.downloadSerialFile = function () {
   a.download = "serial-log.txt"; // ชื่อไฟล์
   a.click();
   URL.revokeObjectURL(a.href);
+};*/
+
+// โหลด log จำลองเป็นไฟล์
+Code.downloadSerialFile = function () {
+  if (!Code._mockLog) {
+    alert("ยังไม่มีข้อมูล log ให้ดาวน์โหลด");
+    return;
+  }
+
+  const blob = new Blob([Code._mockLog], { type: "text/plain;charset=utf-8" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "serial_temp.log";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
 
 /**
@@ -649,3 +665,19 @@ function toggleDisplayHelpModal() {
     }
     HelpModalDisplay_ = !HelpModalDisplay_;
 }
+
+Code.cleanupLog = function () {
+  fetch("http://localhost:8080/cleanup-log")
+    .then(res => res.json())
+    .then(data => alert(data.message))
+    .catch(err => console.error("Error cleaning log:", err));
+};
+
+Code.mockSerialOnce = function () {
+  fetch("http://localhost:8080/mock-serial-once")
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message + "\n" + data.data);
+    })
+    .catch(err => console.error("Error creating mock serial:", err));
+};

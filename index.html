@@ -165,9 +165,8 @@
                                     </button>
                                 </div>
                             </div>
-                           <div  id="content_serial">
-
-
+                           <div  id="content_serial">   
+                            </div>                
 <script>
 const logEl = document.getElementById('content_serial');
 const evtSource = new EventSource("http://localhost:8080/monitor");
@@ -206,7 +205,7 @@ evtSource.onmessage = (event) => {
   }
 };
 </script>
-                        </div>
+                        
                     </td>
                 </tr>
             </table>

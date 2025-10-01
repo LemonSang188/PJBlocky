@@ -66,6 +66,13 @@
                                         </span>
                                     </button>
                                     <span id="saveCodeButton_span_menu" class="menu_text" onclick="Code.saveCodeFile()">บันทึกโค้ด</span>
+                                    <br>
+                                    <button id="downloadlogButton" class="iconButtons" onclick="Code.downloadSerialFile()">
+                                        <span id="downloadlogButton_span">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </span>
+                                    </button>
+                                    <span id="downloadlogButton_span_menu" class="menu_text" onclick="Code.downloadSerialFile()"></span>
                                     <!-- <button id="parametersButton" class="iconButtons" onclick="document.getElementById('lateral-panel-setup-input').click();">
                                         <span id="parametersButton_span">
                                             <i class="fas fa-cog"></i>
@@ -120,9 +127,12 @@
                                 <i class="fas fa-upload"></i>
                             </span>
                         </button>
-                        <button onclick="Code.downloadSerialFile()">
-                                <i class="fas fa-save"></i>
+                        <button id="downloadlogButton" class="iconButtons" onclick="Code.downloadSerialFile()">
+                            <span id="downloadlogButton_span">
+                                <i class="fas fa-arrow-down"></i>
+                            </span>
                         </button>
+                        <button onclick="Code.TestConsole()">TestLog</button>
                         <!-- <button id="serialConnectButton" class="iconButtons">
                             <span id="serialConnectButton_span">
                                 <i class="fas fa-search"></i>
@@ -543,6 +553,7 @@ evtSource.onmessage = (event) => {
     <script src="./js/renderingConstant.js"></script>
     <script src="./js/toolbox.js"></script>
     <script src="./@blockly/demos/custom-dialogs/custom-dialog.js"></script>
+    <script src="./js/AutoCheck.js"></script>
     <!-- blocklyduino libraries of external functions -->
     <script src="./js/ace/ace.js" charset="utf-8"></script>
     <script src="./js/ace/ext-language_tools.js"></script>

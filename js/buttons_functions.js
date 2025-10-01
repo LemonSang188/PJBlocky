@@ -240,6 +240,10 @@ Code.downloadSerialFile = function () {
   URL.revokeObjectURL(a.href);
 };
 
+Code.TestConsole = function () {
+console.log("TestLog");
+};
+
 /**
   * Creats an INO file containing the Arduino code from the Blockly workspace
   * and posts it to http://127.0.0.1/verify/ which will pass it to the 

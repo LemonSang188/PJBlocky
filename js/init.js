@@ -78,6 +78,9 @@ Code.init = function () {
             scaleSpeed: 1.1
         }
     });
+    // ✅ เรียกหลังจาก workspace ถูกสร้างเสร็จ
+    autoCheckEmptyBlocks(Code.workspace);
+    
     const metrics = Code.workspace.getMetrics();
     var onresize = function (e) {
         var element = container;
@@ -248,6 +251,8 @@ Code.initLanguage = function () {
     document.getElementById('redoButton').title = MSG['redoButton_span'];
     document.getElementById('verifyButton').title = MSG['verifyButton_span'];
     document.getElementById('uploadButton').title = MSG['uploadButton_span'];
+    document.getElementById('downloadlogButton').title = MSG['downloadlogButton_span'];
+    document.getElementById('downloadlogButton_span_menu').innerText = MSG['downloadlogButton_span'];
     //document.getElementById('serialConnectButton').title = MSG['serialConnectButton_span'];
     document.getElementById('saveCodeButton').title = MSG['saveCodeButton_span'];
     document.getElementById('newButton').title = MSG['newButton_span'];

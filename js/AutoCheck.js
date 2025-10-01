@@ -21,7 +21,7 @@ function autoCheckEmptyBlocks(workspace) {
       // ตรวจ input connections
       block.inputList.forEach(input => {
         if (input.connection && !input.connection.targetBlock()) {
-          warnings.push(`⚠ Input "${input.name}" ว่างอยู่`);
+          warnings.push(`⚠ Input "${input.name}" is empty`);
         }
       });
 
@@ -29,7 +29,7 @@ function autoCheckEmptyBlocks(workspace) {
       block.inputList.forEach(input => {
         input.fieldRow.forEach(field => {
           if (field.EDITABLE && !field.getValue()) {
-            warnings.push(`⚠ Field "${field.name}" ยังไม่มีค่า`);
+            warnings.push(`⚠ Field "${field.name}" is empty`);
           }
         });
       });

@@ -233,12 +233,13 @@ app.post('/upload-code', async (req, res) => {
               return; // ไม่เก็บค่า 0.00
             }
 
-            fetch('/save-log', {
+           const logText = line.toString().trim();
+
+          fetch('http://localhost:8080/save-log', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ log: visibleLog })
+            body: JSON.stringify({ log: logText })
           });
-
             // ส่งไปยัง client
             broadcast(line);
             console.log(`📟 Serial: ${line}`);
